@@ -17,12 +17,12 @@ management:
         include: health, info, prometheus
 
 springdoc:
-  packagesToScan: uk.gov.hmcts.reform.demo.controllers
+  packagesToScan: uk.gov.hmcts.reform.laubackend.eud.controllers
   writer-with-order-by-keys: true
 
 spring:
   config:
-    import: "optional:configtree:/mnt/secrets/rpe/"
+    import: "optional:configtree:/mnt/secrets/lau/"
   application:
     name: Spring Boot Template
 #  datasource:
@@ -49,4 +49,4 @@ spring:
 
 azure:
   application-insights:
-    instrumentation-key: ${rpe.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
+    instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
