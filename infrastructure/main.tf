@@ -111,7 +111,7 @@ resource "azurerm_key_vault_secret" "flyway_password" {
   value        = module.lau-eud-db-flexible.password
 }
 
-resource "azurerm_key_vault_secret" "lau_case_db_user" {
+resource "azurerm_key_vault_secret" "lau_eud_db_user" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "eud-backend-app-db-user-flexible"
   value        = "lauuser"
