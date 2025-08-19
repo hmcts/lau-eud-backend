@@ -2,6 +2,9 @@
 ARG APP_INSIGHTS_AGENT_VERSION=3.7.3
 FROM hmctspublic.azurecr.io/base/java:21-distroless
 
+# Change to non-root privilege
+USER hmcts
+
 COPY lib/applicationinsights.json /opt/app/
 COPY build/libs/lau-eud-backend.jar /opt/app/
 
