@@ -117,9 +117,13 @@ resource "azurerm_key_vault_secret" "lau_case_db_user" {
   value        = "lauuser"
 }
 
-resource "azurerm_key_vault_secret" "case_request_key" {
+resource "azurerm_key_vault_secret" "eud_request_key" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "eud-backend-encryption-key"
   value        = random_password.password.result
 }
 
+resource "random_password" "password" {
+  length           = 32
+  override_special = "()-_"
+}
