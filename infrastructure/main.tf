@@ -123,7 +123,3 @@ resource "azurerm_key_vault_secret" "case_request_key" {
   value        = random_password.password.result
 }
 
-resource "random_password" "password" {
-  length           = 32
-  override_special = "()-_"
-}
