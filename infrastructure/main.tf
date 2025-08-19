@@ -77,19 +77,19 @@ module "lau-eud-db-flexible" {
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "${var.component}-POSTGRES-USER"
-  value        = module.lau-case-db-flexible.username
+  value        = module.lau-eud-db-flexible.username
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "${var.component}-POSTGRES-PASS"
-  value        = module.lau-case-db-flexible.password
+  value        = module.lau-eud-db-flexible.password
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "${var.component}-POSTGRES-HOST"
-  value        = module.lau-case-db-flexible.fqdn
+  value        = module.lau-eud-db-flexible.fqdn
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
@@ -101,14 +101,14 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "${var.component}-POSTGRES-DATABASE"
-  value        = var.lau_case_db_name
+  value        = var.lau_eud_db_name
 }
 
 # Copy postgres password for flyway migration
 resource "azurerm_key_vault_secret" "flyway_password" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "eud-flyway-password"
-  value        = module.lau-case-db-flexible.password
+  value        = module.lau-eud-db-flexible.password
 }
 
 resource "azurerm_key_vault_secret" "lau_case_db_user" {
