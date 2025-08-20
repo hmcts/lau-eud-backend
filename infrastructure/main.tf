@@ -42,8 +42,6 @@ module "lau-eud-db-flexible" {
   pgsql_storage_mb          = var.pgsql_storage_mb
   pgsql_delegated_subnet_id = var.pgsql_delegated_subnet_id
 
-  auto_grow_enabled = true
-
   pgsql_admin_username = "lauadmin"
   pgsql_version        = "15"
 
