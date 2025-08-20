@@ -9,4 +9,6 @@ def product = "lau"
 def component = "eud-backend"
 def branchesToSync = ['demo','perftest','ithc']
 
-withPipeline(type, product, component) {}
+withPipeline(type, product, component) {
+    syncBranchesWithMaster(branchesToSync)
+}
