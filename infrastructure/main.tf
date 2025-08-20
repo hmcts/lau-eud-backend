@@ -13,7 +13,6 @@ provider "azurerm" {
 locals {
   db_connection_options = "?sslmode=require"
   vault_name            = "${var.product}-${var.env}"
-  asp_name              = "${var.product}-${var.env}"
   env                   = var.env
   db_server_name        = "${var.product}-${var.component}-flexible"
 }

@@ -57,9 +57,9 @@ variable "pgsql_storage_mb" {
 }
 
 variable "subnet_suffix" {
-  default     = null
+  default     = "expanded"
   type        = string
-  description = "Suffix to append to the subnet name, the originally created one used by this module is full in a number of environments."
+  description = "Suffix to append to the subnet name, The original subnet is full, this is required to use the new subnet for new databases"
 }
 
 variable "db_monitor_action_group_name" {
