@@ -24,28 +24,60 @@ spring:
   config:
     import: "optional:configtree:/mnt/secrets/lau/"
   application:
-    name: Spring Boot Template
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}${DB_OPTIONS:}
-#    username: ${DB_USER_NAME}
-#    password: ${DB_PASSWORD}
-#    properties:
-#      charSet: UTF-8
-#    hikari:
-#      minimumIdle: 2
-#      maximumPoolSize: 10
-#      idleTimeout: 10000
-#      poolName: {to-be-defined}HikariCP
-#      maxLifetime: 7200000
-#      connectionTimeout: 30000
-#  jpa:
-#    properties:
-#      hibernate:
-#        jdbc:
-#          lob:
-#            # silence the 'wall-of-text' - unnecessary exception throw about blob types
-#            non_contextual_creation: true
+    name: EUD Log and Audit
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${LAU_EUD_DB_HOST:localhost}:${LAU_EUD_DB_PORT:5432}/${LAU_EUD_DB_NAME:lau_case}${LAU_EUD_DB_CONN_OPTIONS:}
+    username: ${LAU_EUD_DB_USERNAME:}
+    password: ${LAU_EUD_DB_PASSWORD:}
+    properties:
+      charSet: UTF-8
+    hikari:
+      maximumPoolSize: 5
+      poolName: LAUEudHikariCP
+      connectionTimeout: 60000
+      data-source-properties:
+        socketTimeout: 60
+  #    tomcat:
+  #      max-active: 10
+  #      max-idle: 10
+  #      min-idle: 2
+  #      max-wait: 10000
+  #      test-on-borrow: true
+  #      test-on-connect: true
+  #      test-on-idle: true
+  #      validation-query: "SELECT 1"
+  #      time-between-eviction-runs-millis: 10000
+  #      test-while-idle: true
+  #      test-on-return: true
+  #      remove-abandoned: true
+  #      remove-abandoned-timeout: 60
+  #      log-abandoned: true
+  #      abandon-when-percentage-full: 0
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            # silence the 'wall-of-text' - unnecessary exception throw about blob types
+            non_contextual_creation: true
+    open-in-view: true
+  flyway:
+    postgresql.transactional-lock: false
+    enabled: ${LAU_FLYWAY_MIGRATE_DB:false}
+    user: ${LAU_EUD_DB_ADMIN_USERNAME:}
+    password: ${LAU_EUD_DB_ADMIN_PASSWORD:}
+    placeholders:
+      LAU_DB_PASSWORD: ${LAU_EUD_DB_PASSWORD:}
+
+security:
+  db:
+    backend-encryption-key: ${LAU_EUD_ENCRYPTION_KEY:ThisIsATestKeyForEncryption}
+    encryption-enabled: ${LAU_EUD_ENCRYPTION_ENABLED:Yes}
 
 azure:
   application-insights:

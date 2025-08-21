@@ -11,6 +11,29 @@ def type = "java"
 def product = "lau"
 def component = "eud-backend"
 
+def secrets = [
+  'lau-${env}': [
+    secret('eud-backend-POSTGRES-USER', 'FLYWAY_USER'),
+    secret('eud-backend-POSTGRES-PASS', 'LAU_EUD_DB_ADMIN_PASSWORD'),
+    secret('eud-backend-POSTGRES-PASS', 'FLYWAY_PASSWORD'),
+    secret('eud-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD'),
+    secret('eud-backend-app-db-password', 'LAU_EUD_DB_PASSWORD'),
+    secret('eud-backend-encryption-key', 'LAU_EUD_ENCRYPTION_KEY'),
+    secret( 'idam-client-secret', 'IDAM_CLIENT_SECRET')
+  ]
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [$class     : 'AzureKeyVaultSecret',
+   secretType : 'Secret',
+   name       : secretName,
+   version    : '',
+   envVariable: envVar
+  ]
+}
+
 withNightlyPipeline(type, product, component) {
+  loadVaultSecrets(secrets)
   enableFortifyScan()
+
 }
