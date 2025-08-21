@@ -110,7 +110,7 @@ resource "azurerm_key_vault_secret" "lau_eud_db_user" {
 
 resource "azurerm_key_vault_secret" "lau_eud_db_password" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "case-backend-app-db-password"
+  name         = "eud-backend-app-db-password"
   value        = random_password.password.result
 }
 
