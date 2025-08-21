@@ -1,9 +1,16 @@
+buildscript {
+  dependencies {
+    classpath "org.flywaydb:flyway-database-postgresql:11.10.5"
+  }
+}
+
 plugins {
   id 'application'
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.1.7'
   id 'org.springframework.boot' version '3.5.4'
   id 'com.github.ben-manes.versions' version '0.52.0'
+  id 'org.flywaydb.flyway' version '11.1.1'
   id 'org.sonarqube' version '6.2.0.5505'
   /*
     Applies analysis tools including checkstyle and OWASP Dependency checker.
@@ -138,6 +145,10 @@ repositories {
   }
 }
 
+def versions = [
+  flywaydb          : '11.11.0',
+]
+
 ext {
   log4JVersion = "2.25.1"
   logbackVersion = "1.5.18"
@@ -161,10 +172,35 @@ dependencies {
   implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
   implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
   implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
+  implementation group: 'org.flywaydb', name: 'flyway-core', version: versions.flywaydb
+  implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: versions.flywaydb
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.5.6'
   testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all'
+}
+
+flyway {
+  url = System.getenv('FLYWAY_URL')
+  user = System.getenv('FLYWAY_USER')
+  password = System.getenv('FLYWAY_PASSWORD')
+
+  if (System.getenv("LAU_EUD_DB_PASSWORD")) {
+    placeholders = [
+      'LAU_EUD_DB_PASSWORD': System.getenv("LAU_EUD_DB_PASSWORD")
+    ]
+  }
+
+  baselineOnMigrate = true
+  baselineVersion = '000'
+}
+
+import org.flywaydb.gradle.task.FlywayMigrateTask
+task migratePostgresDatabase(type: FlywayMigrateTask) {
+  baselineOnMigrate = true
+  if (project.hasProperty("dburl")) {
+    url = "jdbc:postgresql://${dburl}"
+  }
 }
 
 bootJar {
