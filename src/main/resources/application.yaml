@@ -1,5 +1,5 @@
 server:
-  port: 4550
+  port: 4553
   shutdown: "graceful"
 
 # If you use a database then uncomment the `group:, readiness: and include: "db"` lines in the health probes and uncomment the datasource section
@@ -24,28 +24,40 @@ spring:
   config:
     import: "optional:configtree:/mnt/secrets/lau/"
   application:
-    name: Spring Boot Template
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}${DB_OPTIONS:}
-#    username: ${DB_USER_NAME}
-#    password: ${DB_PASSWORD}
-#    properties:
-#      charSet: UTF-8
-#    hikari:
-#      minimumIdle: 2
-#      maximumPoolSize: 10
-#      idleTimeout: 10000
-#      poolName: {to-be-defined}HikariCP
-#      maxLifetime: 7200000
-#      connectionTimeout: 30000
-#  jpa:
-#    properties:
-#      hibernate:
-#        jdbc:
-#          lob:
-#            # silence the 'wall-of-text' - unnecessary exception throw about blob types
-#            non_contextual_creation: true
+    name: EUD Log and Audit
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${LAU_EUD_DB_HOST:localhost}:${LAU_EUD_DB_PORT:5432}/${LAU_EUD_DB_NAME:lau_eud}${LAU_EUD_DB_CONN_OPTIONS:}
+    username: ${LAU_EUD_DB_USERNAME:}
+    password: ${LAU_EUD_DB_PASSWORD:}
+    properties:
+      charSet: UTF-8
+    hikari:
+      maximumPoolSize: 5
+      poolName: LAUEudHikariCP
+      connectionTimeout: 60000
+      data-source-properties:
+        socketTimeout: 60
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            # silence the 'wall-of-text' - unnecessary exception throw about blob types
+            non_contextual_creation: true
+  flyway:
+    postgresql.transactional-lock: false
+    enabled: ${LAU_FLYWAY_MIGRATE_DB:false}
+    user: ${LAU_EUD_DB_ADMIN_USERNAME:}
+    password: ${LAU_EUD_DB_ADMIN_PASSWORD:}
+    placeholders:
+      LAU_DB_PASSWORD: ${LAU_EUD_DB_PASSWORD:}
+
+security:
+  db:
+    backend-encryption-key: ${LAU_EUD_ENCRYPTION_KEY:ThisIsATestKeyForEncryption}
+    encryption-enabled: ${LAU_EUD_ENCRYPTION_ENABLED:Yes}
 
 azure:
   application-insights:

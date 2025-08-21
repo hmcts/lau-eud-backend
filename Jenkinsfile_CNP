@@ -7,6 +7,57 @@ def product = "lau"
 def component = "eud-backend"
 def branchesToSync = ['demo','perftest','ithc']
 
+def flywaySecrets = [
+        secret('eud-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD')
+]
+
+def secrets = [
+        'lau-${env}': [
+                secret('eud-backend-POSTGRES-USER', 'FLYWAY_USER'),
+                secret('eud-backend-POSTGRES-PASS', 'LAU_EUD_DB_ADMIN_PASSWORD'),
+                secret('eud-backend-POSTGRES-PASS', 'FLYWAY_PASSWORD'),
+                secret('eud-backend-app-db-password', 'LAU_EUD_DB_PASSWORD'),
+                secret('eud-backend-encryption-key', 'LAU_EUD_ENCRYPTION_KEY'),
+                secret( 'idam-client-secret', 'IDAM_CLIENT_SECRET')
+        ]
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+    [$class     : 'AzureKeyVaultSecret',
+     secretType : 'Secret',
+     name       : secretName,
+     version    : '',
+     envVariable: envVar
+    ]
+}
+
 withPipeline(type, product, component) {
+    loadVaultSecrets(secrets)
+
+    before('buildinfra:aat') {
+        withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-aat.vault.azure.net') {
+            env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD
+        }
+    }
+
+    before('buildinfra:demo') {
+        withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-demo.vault.azure.net') {
+            env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD
+        }
+    }
+
+    before('buildinfra:perftest') {
+        withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-perftest.vault.azure.net') {
+            env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD
+        }
+    }
+
+    before('buildinfra:ithc') {
+        withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-ithc.vault.azure.net') {
+            env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD
+        }
+    }
     syncBranchesWithMaster(branchesToSync)
+    enableDbMigration('lau')
+
 }
