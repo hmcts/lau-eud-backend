@@ -3,8 +3,6 @@ java:
   image: 'hmctspublic.azurecr.io/lau/eud-backend:latest'
   ingressHost: lau-eud-backend-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: lau
-  spotInstances:
-    enabled: true
   environment:
     LAU_EUD_DB_NAME: lau_eud
     LAU_EUD_DB_HOST: lau-eud-backend-flexible-{{ .Values.global.environment }}.postgres.database.azure.com
