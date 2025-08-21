@@ -5,6 +5,7 @@
 def type = "java"
 def product = "lau"
 def component = "eud-backend"
+def branchesToSync = ['demo','perftest','ithc']
 
 def flywaySecrets = [
         secret('eud-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD')
@@ -56,7 +57,7 @@ withPipeline(type, product, component) {
             env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD
         }
     }
-
+    syncBranchesWithMaster(branchesToSync)
     enableDbMigration('lau')
 
 }
