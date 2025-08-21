@@ -28,7 +28,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://${LAU_EUD_DB_HOST:localhost}:${LAU_EUD_DB_PORT:5432}/${LAU_EUD_DB_NAME:lau_case}${LAU_EUD_DB_CONN_OPTIONS:}
+    url: jdbc:postgresql://${LAU_EUD_DB_HOST:localhost}:${LAU_EUD_DB_PORT:5432}/${LAU_EUD_DB_NAME:lau_eud}${LAU_EUD_DB_CONN_OPTIONS:}
     username: ${LAU_EUD_DB_USERNAME:}
     password: ${LAU_EUD_DB_PASSWORD:}
     properties:
