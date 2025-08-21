@@ -101,17 +101,17 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   value        = var.lau_eud_db_name
 }
 
-# Copy postgres password for flyway migration
-resource "azurerm_key_vault_secret" "flyway_password" {
-  key_vault_id = data.azurerm_key_vault.key_vault.id
-  name         = "eud-flyway-password"
-  value        = module.lau-eud-db-flexible.password
-}
 
 resource "azurerm_key_vault_secret" "lau_eud_db_user" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "eud-backend-app-db-user-flexible"
   value        = "lauuser"
+}
+
+resource "azurerm_key_vault_secret" "lau_eud_db_password" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+  name         = "eud-backend-app-db-password"
+  value        = random_password.password.result
 }
 
 resource "azurerm_key_vault_secret" "eud_db_encryption_key" {
