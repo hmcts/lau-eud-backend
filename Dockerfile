@@ -8,5 +8,5 @@ USER hmcts
 COPY lib/applicationinsights.json /opt/app/
 COPY build/libs/lau-eud-backend.jar /opt/app/
 
-EXPOSE 4550
+EXPOSE 4553
 CMD [ "lau-eud-backend.jar" ]
