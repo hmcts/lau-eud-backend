@@ -1,4 +1,4 @@
--- create user for application access
+  -- create user for application access
   DO
   $do$
   BEGIN
