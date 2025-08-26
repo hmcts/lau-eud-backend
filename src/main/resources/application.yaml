@@ -40,7 +40,6 @@ spring:
       data-source-properties:
         socketTimeout: 60
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         jdbc:
