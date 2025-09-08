@@ -40,9 +40,9 @@ spring:
       data-source-properties:
         socketTimeout: 60
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           lob:
             # silence the 'wall-of-text' - unnecessary exception throw about blob types
