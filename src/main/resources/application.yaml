@@ -62,3 +62,9 @@ security:
 azure:
   application-insights:
     instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
+
+logging:
+  level:
+    org.springframework.boot.context.config: TRACE
+    org.springframework.boot.autoconfigure.jdbc: DEBUG
+    com.zaxxer.hikari: DEBUG
