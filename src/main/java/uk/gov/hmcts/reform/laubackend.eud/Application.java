@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
 
     public static void main(final String[] args) {
-        System.getenv().forEach((key, value) -> System.out.println(key + ": " + value));
         SpringApplication.run(Application.class, args);
     }
 }
