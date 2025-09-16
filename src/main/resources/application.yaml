@@ -40,6 +40,7 @@ spring:
       data-source-properties:
         socketTimeout: 60
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         jdbc:
@@ -52,7 +53,7 @@ spring:
     user: ${LAU_EUD_DB_ADMIN_USERNAME:}
     password: ${LAU_EUD_DB_ADMIN_PASSWORD:}
     placeholders:
-      LAU_DB_PASSWORD: ${LAU_EUD_DB_PASSWORD:}
+      LAU_EUD_DB_PASSWORD: ${LAU_EUD_DB_PASSWORD:}
 
 security:
   db:
