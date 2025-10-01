@@ -1,0 +1,18 @@
+package uk.gov.hmcts.reform.laubackend.eud.constants;
+
+import static java.lang.String.valueOf;
+
+public final class ExceptionMessageConstants {
+
+    private ExceptionMessageConstants() {
+    }
+
+    public static final String MISSING_GET_USER_DATA_PARAMETERS_MESSAGE =
+        "UserId or EmailAddress parameter is required";
+    public static final String USERID_GET_EXCEPTION_MESSAGE = "Unable to verify userId path parameter pattern: ";
+
+    public static String appendExceptionParameter(final String exceptionMessage,
+                                                  final String exceptionParameter) {
+        return exceptionMessage.concat(valueOf(exceptionParameter));
+    }
+}
