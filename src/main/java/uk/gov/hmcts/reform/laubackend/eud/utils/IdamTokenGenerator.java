@@ -42,8 +42,4 @@ public class IdamTokenGenerator {
         }
         return BEARER + idamClientToken;
     }
-
-    public String getIdamAuthorizationHeader() {
-        return BEARER + idamClientToken;
-    }
 }
