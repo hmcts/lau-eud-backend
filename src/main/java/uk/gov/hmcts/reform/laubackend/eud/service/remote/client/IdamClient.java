@@ -17,7 +17,7 @@ import uk.gov.hmcts.reform.laubackend.eud.response.UserDataResponse;
 public interface IdamClient {
     String CONTENT_TYPE = "application/json";
 
-    @GetMapping(value = CommonConstants.USER_DATA_BY_USERID_PATH + "/{userId}",
+    @GetMapping(value = CommonConstants.USER_DATA_BY_USERID_PATH + "{userId}",
         consumes = CONTENT_TYPE,
         produces = CONTENT_TYPE)
     UserDataResponse getUserDataByUserId(
@@ -25,7 +25,7 @@ public interface IdamClient {
         @PathVariable(name = "userId") String userId
     );
 
-    @GetMapping(value = CommonConstants.USER_DATA_BY_EMAIL_PATH + "/{email}",
+    @GetMapping(value = CommonConstants.USER_DATA_BY_EMAIL_PATH + "{email}",
         consumes = CONTENT_TYPE,
         produces = CONTENT_TYPE)
     UserDataResponse getUserDataByEmail(

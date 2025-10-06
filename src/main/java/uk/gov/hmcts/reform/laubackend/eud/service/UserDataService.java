@@ -9,6 +9,8 @@ import uk.gov.hmcts.reform.laubackend.eud.response.UserDataResponse;
 import uk.gov.hmcts.reform.laubackend.eud.service.remote.client.IdamClient;
 import uk.gov.hmcts.reform.laubackend.eud.utils.IdamTokenGenerator;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,11 +23,11 @@ public class UserDataService {
     public UserDataResponse getUserData(final UserDataGetRequestParams params) {
         UserDataResponse userDataResponse = null;
         try {
-            if (params.userId() != null) {
+            if (notNullOrEmpty(params.userId())) {
                 userDataResponse = client.getUserDataByUserId(
                     idamTokenGenerator.generateIdamToken(), params.userId()
                 );
-            } else if (params.email() != null) {
+            } else if (notNullOrEmpty(params.email())) {
                 userDataResponse = client.getUserDataByEmail(
                     idamTokenGenerator.generateIdamToken(), params.email()
                 );
@@ -36,4 +38,9 @@ public class UserDataService {
         }
         return userDataResponse;
     }
+
+    boolean notNullOrEmpty(final String param) {
+        return param != null && !isEmpty(param);
+    }
+
 }

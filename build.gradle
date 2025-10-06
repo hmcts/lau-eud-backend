@@ -37,7 +37,7 @@ def configureSourceSet(String name) {
       runtimeClasspath += sourceSets.main.output + sourceSets.test.output
       srcDir "src/${name}/java"
     }
-    sourceSet.resources.srcDir "src/${name}/resources"
+    resources.srcDir "src/${name}/resources"
   }
 }
 
@@ -83,6 +83,7 @@ tasks.register('integration', Test) {
   group = "Verification"
   testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
+  mustRunAfter test
   failFast = true
 }
 
@@ -154,7 +155,10 @@ repositories {
 
 def versions = [
   flywaydb          : '11.13.1',
-  lombook           : '1.18.42'
+  lombok           : '1.18.42',
+  cucumber          : '7.28.2',
+  junit             : '5.12.2',
+  junitPlatform     : '1.12.2',
 ]
 
 ext {
@@ -196,6 +200,16 @@ dependencies {
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.5.6'
   testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all'
+
+  //Integration test
+  testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+  testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
+  testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
+  testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
+  testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.13.2'
+
+  integrationTestImplementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 }
 
 flyway {
@@ -231,6 +245,10 @@ bootJar {
 
 // Gradle 7.x issue, workaround from: https://github.com/gradle/gradle/issues/17236#issuecomment-894768083
 rootProject.tasks.named("processSmokeTestResources") {
+  duplicatesStrategy = 'include'
+}
+
+rootProject.tasks.named('processIntegrationTestResources') {
   duplicatesStrategy = 'include'
 }
 
