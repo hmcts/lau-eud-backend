@@ -8,8 +8,6 @@ public final class TestConstants {
 
     // Authorization constants
     public static final String GRANT_TYPE = "client_credentials";
-    public static final String REDIRECT_URI = "https://lau-eud.aat.platform.hmcts.net/oauth2/callback";
-    public static final String SCOPE = "view-user";
     public static final String CLIENT_ID = "lau";
     public static final String TOKEN_URL = "https://idam-api.aat.platform.hmcts.net/o/token";
     public static final String USER_SCOPE = "roles profile";
