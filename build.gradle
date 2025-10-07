@@ -16,6 +16,7 @@ plugins {
   id 'org.sonarqube' version '6.3.1.5724'
   id 'org.owasp.dependencycheck' version '12.1.5'
   id 'uk.gov.hmcts.java' version '0.12.67'
+  id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.34'
 }
 
 application {
@@ -159,6 +160,7 @@ def versions = [
   cucumber          : '7.28.2',
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
+  serenity          : '4.2.34'
 ]
 
 ext {
@@ -193,6 +195,7 @@ dependencies {
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.8'
 
   implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
+  implementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
 
   implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
@@ -210,6 +213,18 @@ dependencies {
 
   integrationTestImplementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+
+
+  //Functional test
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, {
+    exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib'
+  }
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
+  testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+
+  functionalTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+  functionalTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 }
 
 flyway {
@@ -249,6 +264,10 @@ rootProject.tasks.named("processSmokeTestResources") {
 }
 
 rootProject.tasks.named('processIntegrationTestResources') {
+  duplicatesStrategy = 'include'
+}
+
+rootProject.tasks.named('processFunctionalTestResources') {
   duplicatesStrategy = 'include'
 }
 

@@ -1,0 +1,74 @@
+package uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.runner;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.response.Response;
+import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.annotations.Title;
+import net.serenitybdd.junit.runners.SerenityRunner;
+import org.json.JSONException;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.model.UserDataResponseVO;
+import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.steps.UserDataGetApiSteps;
+import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants;
+
+import java.util.Map;
+
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+
+@RunWith(SerenityRunner.class)
+public class UserDataApiTest {
+
+    @Steps
+    UserDataGetApiSteps userDataGetApiSteps;
+
+    @Test
+    @Title("Assert response code of 200 for GET UserData Api with valid headers and valid request params")
+    public void assertHttpSuccessResponseCodeForCaseViewApi() throws Exception {
+        String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData();
+        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+            authServiceToken,
+            queryParamMap
+        );
+        ObjectMapper objectMapper = new ObjectMapper();
+        UserDataResponseVO userDataResponseVO = objectMapper.readValue(
+            response.getBody().asString(),
+            UserDataResponseVO.class
+        );
+        userDataGetApiSteps.thenTheGetUserDataResponseParamsMatchesTheInput(queryParamMap, userDataResponseVO);
+        String successOrFailure = userDataGetApiSteps.thenASuccessResposeIsReturned(response);
+        Assert.assertEquals("The assertion for GET UserData API response code 200 is not successful",
+                            TestConstants.SUCCESS,successOrFailure);
+    }
+
+    @Test
+    @Title("Assert response code of 403 for GET UserData Api service with Invalid ServiceAuthorization Token")
+    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetUserDataApi() throws JSONException {
+        String invalidServiceToken = userDataGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData();
+        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+            invalidServiceToken,
+            queryParamMap
+        );
+        String successOrFailure = userDataGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
+        Assert.assertEquals("CaseAction API response code 403 assertion is not successful",
+                            TestConstants.SUCCESS,successOrFailure
+
+        );
+    }
+
+    @Test
+    @Title("Assert response code of 400 for GET CaseActionApi with Empty Params")
+    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() throws JSONException {
+        String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenEmptyParamsAreSuppliedForGetUserData();
+        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+            authServiceToken,
+            queryParamMap
+        );
+        String successOrFailure = userDataGetApiSteps.thenBadResponseIsReturned(response, 400);
+        Assert.assertEquals("The assertion is not successful", TestConstants.SUCCESS,successOrFailure);
+    }
+}
