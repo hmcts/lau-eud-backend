@@ -33,7 +33,7 @@ public class AuthorizationHeaderHelper {
             .formParam("grant_type", GRANT_TYPE)
             .formParam("scope", USER_SCOPE)
             .formParam("client_id", CLIENT_ID)
-            .formParam("client_secret", "IDAM_CLIENT_SECRET")
+            .formParam("client_secret", IDAM_CLIENT_SECRET)
             .when()
             .post(TOKEN_URL);
 
