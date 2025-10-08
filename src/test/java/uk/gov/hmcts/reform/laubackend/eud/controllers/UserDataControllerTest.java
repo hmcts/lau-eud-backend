@@ -35,9 +35,9 @@ class UserDataControllerTest {
     @Test
     void shouldReturnUserDataWhenRequestIsValid() {
         UserDataResponse expectedResponse = new UserDataResponse();
-        expectedResponse.setId("1234");
+        expectedResponse.setUserId("1234");
         expectedResponse.setEmail("test@test.com");
-        expectedResponse.setRoleNames(new ArrayList<String>(Arrays.asList("role1", "role2")));
+        expectedResponse.setRoles(new ArrayList<String>(Arrays.asList("role1", "role2")));
         expectedResponse.setAccountStatus("ACTIVE");
 
         UserDataGetRequestParams requestParams = new UserDataGetRequestParams("1234","test@test.com");

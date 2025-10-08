@@ -11,35 +11,35 @@ import java.util.List;
 @Generated("jsonschema2pojo")
 public class UserDataResponseVO {
 
-    @JsonProperty("roleNames")
-    private List<String> roleNames;
-    @JsonProperty("id")
-    private String id;
+    @JsonProperty("roles")
+    private List<String> roles;
+    @JsonProperty("userId")
+    private String userId;
     @JsonProperty("email")
     private String email;
     @JsonProperty("accountStatus")
     private String accountStatus;
-    @JsonProperty("createDate")
-    private String createDate;
+    @JsonProperty("accountCreationDate")
+    private String accountCreationDate;
 
-    @JsonProperty("roleNames")
-    public List<String> getRoleNames() {
-        return roleNames;
+    @JsonProperty("roles")
+    public List<String> getRoles() {
+        return roles;
     }
 
-    @JsonProperty("roleNames")
-    public void setRoleNames(List<String> roleNames) {
-        this.roleNames = roleNames;
+    @JsonProperty("roles")
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
-    @JsonProperty("id")
-    public String getId() {
-        return id;
+    @JsonProperty("userId")
+    public String getUserId() {
+        return userId;
     }
 
-    @JsonProperty("id")
-    public void seId(String id) {
-        this.id = id;
+    @JsonProperty("userId")
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @JsonProperty("email")

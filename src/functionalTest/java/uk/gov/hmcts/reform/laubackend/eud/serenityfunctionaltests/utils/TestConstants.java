@@ -15,7 +15,7 @@ public final class TestConstants {
 
 
     /*endPoint*/
-    public static final String USER_DATA_ENDPOINT = "/userData";
+    public static final String USER_DATA_ENDPOINT = "/audit/userData";
 
 
     public static final String SUCCESS = "Success";

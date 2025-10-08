@@ -39,7 +39,7 @@ public class UserDataGetApiSteps extends BaseSteps {
         for (String queryParam : inputQueryParamMap.keySet()) {
 
             if ("userId".equals(queryParam)) {
-                String userId = userDataResponseVO.getId();
+                String userId = userDataResponseVO.getUserId();
                 Assert.assertEquals(
                     "User Id is missing in the response",
                     inputQueryParamMap.get(queryParam), userId

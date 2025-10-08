@@ -48,9 +48,9 @@ class UserDataServiceTest {
         when(params.email()).thenReturn(null);
 
         UserDataResponse expectedResponse = new UserDataResponse();
-        expectedResponse.setId(userId);
+        expectedResponse.setUserId(userId);
         expectedResponse.setEmail("test@test.com");
-        expectedResponse.setRoleNames(new ArrayList<String>(Arrays.asList("role1", "role2")));
+        expectedResponse.setRoles(new ArrayList<String>(Arrays.asList("role1", "role2")));
         expectedResponse.setAccountStatus("ACTIVE");
 
         String token = "mock-token";

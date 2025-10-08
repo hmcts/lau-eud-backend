@@ -38,7 +38,7 @@ public class UserDataGetSteps extends AbstractSteps {
 
     private void assertObject(final UserDataResponse userDataResponse) {
         assertThat(userDataResponse).isNotNull();
-        assertThat(userDataResponse.getId())
+        assertThat(userDataResponse.getUserId())
             .isEqualTo("13e31622-edea-493c-8240-9b780c9d6111");
         assertThat(userDataResponse.getEmail())
             .isEqualTo("john111.smith111@example.org");

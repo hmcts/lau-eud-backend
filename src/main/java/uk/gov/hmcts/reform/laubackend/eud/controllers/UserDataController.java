@@ -55,7 +55,7 @@ public class UserDataController {
         description = "Internal Server Error",
         content = { @Content(schema = @Schema(implementation = UserDataResponse.class))})
     @GetMapping(
-        path = "/userData",
+        path = "/audit/userData",
         produces = APPLICATION_JSON_VALUE
     )
     public ResponseEntity<UserDataResponse> getUserData(
