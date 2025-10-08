@@ -11,7 +11,7 @@ public class RestApiPreInvokeConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
-        registry.addInterceptor(restApiPreInvokeInterceptor()).addPathPatterns("/userData/**");
+        registry.addInterceptor(restApiPreInvokeInterceptor()).addPathPatterns("/audit/userData/**");
     }
 
     @Bean
