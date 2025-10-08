@@ -27,7 +27,8 @@ public class UserDataApiTest {
     @Title("Assert response code of 200 for GET UserData Api with valid headers and valid request params")
     public void assertHttpSuccessResponseCodeForCaseViewApi() throws Exception {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
-        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData();
+        String userId = userDataGetApiSteps.createUserToPassAsParam();
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(userId);
         Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
@@ -41,13 +42,15 @@ public class UserDataApiTest {
         String successOrFailure = userDataGetApiSteps.thenASuccessResposeIsReturned(response);
         Assert.assertEquals("The assertion for GET UserData API response code 200 is not successful",
                             TestConstants.SUCCESS,successOrFailure);
+        userDataGetApiSteps.deleteTheUser();
     }
 
     @Test
     @Title("Assert response code of 403 for GET UserData Api service with Invalid ServiceAuthorization Token")
     public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetUserDataApi() throws JSONException {
         String invalidServiceToken = userDataGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
-        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData();
+        String userId = userDataGetApiSteps.createUserToPassAsParam();
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(userId);
         Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
             invalidServiceToken,
             queryParamMap
@@ -57,6 +60,7 @@ public class UserDataApiTest {
                             TestConstants.SUCCESS,successOrFailure
 
         );
+        userDataGetApiSteps.deleteTheUser();
     }
 
     @Test

@@ -18,10 +18,9 @@ public class UserDataGetApiSteps extends BaseSteps {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDataGetApiSteps.class);
 
     @Step("When valid params are supplied for Get UserData API")
-    public Map<String, String> givenValidParamsAreSuppliedForGetUserData() {
-        //String userId = createNewUser();
+    public Map<String, String> givenValidParamsAreSuppliedForGetUserData(String userId) {
         Map<String, String> queryParamMap = new ConcurrentHashMap<>();
-        queryParamMap.put("userId", "functional1234567");
+        queryParamMap.put("userId", userId);
         return queryParamMap;
     }
 
@@ -87,5 +86,18 @@ public class UserDataGetApiSteps extends BaseSteps {
             response.statusCode() == 200 || response.statusCode() == 201
         );
         return SUCCESS;
+    }
+
+    @Step("Create a user to pass as param")
+    public String createUserToPassAsParam() {
+        String userId = createNewUser();
+        Assert.assertNotNull("User Id is null",userId);
+        return userId;
+    }
+
+    @Step("Delete the user after test")
+    public void deleteTheUser() {
+        int statusCode =  deleteUser();
+        Assert.assertEquals(204,statusCode);
     }
 }

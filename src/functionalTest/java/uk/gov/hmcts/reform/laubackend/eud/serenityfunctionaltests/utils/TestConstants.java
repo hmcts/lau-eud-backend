@@ -11,7 +11,7 @@ public final class TestConstants {
     public static final String CLIENT_ID = "lau";
     public static final String TOKEN_URL = "https://idam-api.aat.platform.hmcts.net/o/token";
     public static final String USER_SCOPE = "roles profile";
-    public static final String CREATE_USER_URL = "https://idam-testing-support-api.aat.platform.hmcts.net/test/idam/users";
+    public static final String TESTING_SUPPORT_ACCOUNTS_URL = "https://idam-api.aat.platform.hmcts.net/testing-support/accounts";
 
 
     /*endPoint*/

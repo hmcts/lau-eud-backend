@@ -1,9 +1,7 @@
 package uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.helper;
 
 import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -17,7 +15,6 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.config.EnvConfig.IDAM_CLIENT_SECRET;
 import static uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants.CLIENT_ID;
-import static uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants.CREATE_USER_URL;
 import static uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants.GRANT_TYPE;
 import static uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants.S2S_NAME;
 import static uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants.S2S_URL;
@@ -36,7 +33,7 @@ public class AuthorizationHeaderHelper {
             .formParam("grant_type", GRANT_TYPE)
             .formParam("scope", USER_SCOPE)
             .formParam("client_id", CLIENT_ID)
-            .formParam("client_secret", IDAM_CLIENT_SECRET)
+            .formParam("client_secret", "IDAM_CLIENT_SECRET")
             .when()
             .post(TOKEN_URL);
 
@@ -68,40 +65,6 @@ public class AuthorizationHeaderHelper {
             .asString();
     }
 
-    public ExtractableResponse<Response> createUser() {
-        try {
-            return RestAssured.given()
-                .header("Authorization", getAuthorizationToken())
-                .header("Content-Type", "application/json")
-                .body(makeUser())
-                .when()
-                .post(CREATE_USER_URL)
-                .then()
-                .statusCode(201)
-                .extract();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    private String makeUser() {
-        JSONObject makeUser = new JSONObject();
-        try {
-            makeUser.put("password","Test1234567");
-            JSONObject user = new JSONObject();
-            user.put("id", "functional1234567");
-            user.put("email", "functional1234567@test.com");
-            user.put("forename", "lautestEud");
-            user.put("surname", "test");
-            JSONArray roles = new JSONArray();
-            roles.put("citizen");
-            roles.put("caseworker");
-            user.put("roleNames", roles);
-            makeUser.put("user", user);
-        } catch (JSONException je) {
-            LOGGER.error(je.getMessage(), je);
-        }
 
-        return makeUser.toString();
-    }
 }

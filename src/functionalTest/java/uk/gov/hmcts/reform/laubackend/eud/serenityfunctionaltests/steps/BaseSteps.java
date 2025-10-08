@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.helper.AuthorizationHeaderHelper;
 import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.config.EnvConfig;
+import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.helper.DatabaseHelper;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -23,6 +24,7 @@ public class BaseSteps {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(BaseSteps.class);
     protected final AuthorizationHeaderHelper authorizationHeaderHelper = new AuthorizationHeaderHelper();
+    protected final DatabaseHelper databaseHelper = new DatabaseHelper();
 
     static {
         final String proxyHost = System.getProperty("http.proxyHost");
@@ -117,7 +119,12 @@ public class BaseSteps {
     }
 
     protected String createNewUser() {
-        ExtractableResponse<Response> res =  authorizationHeaderHelper.createUser();
+        ExtractableResponse<Response> res =  databaseHelper.createUser();
         return res.path("id");
+    }
+
+    protected int deleteUser() {
+        ExtractableResponse<Response> res =  databaseHelper.deleteUser();
+        return res.statusCode();
     }
 }
