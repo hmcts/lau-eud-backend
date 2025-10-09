@@ -1,11 +1,11 @@
 package uk.gov.hmcts.reform.laubackend.eud.constants;
 
+import lombok.NoArgsConstructor;
+
 import static java.lang.String.valueOf;
 
+@NoArgsConstructor
 public final class ExceptionMessageConstants {
-
-    private ExceptionMessageConstants() {
-    }
 
     public static final String MISSING_GET_USER_DATA_PARAMETERS_MESSAGE =
         "UserId or EmailAddress parameter is required";

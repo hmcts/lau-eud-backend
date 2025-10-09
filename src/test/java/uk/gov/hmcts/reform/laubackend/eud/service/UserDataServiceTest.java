@@ -41,7 +41,6 @@ class UserDataServiceTest {
 
     @Test
     void shouldReturnUserDataByUserId() {
-        // Arrange
         String userId = "12345";
         UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
         when(params.userId()).thenReturn(userId);
@@ -57,10 +56,8 @@ class UserDataServiceTest {
         when(idamTokenGenerator.generateIdamToken()).thenReturn(token);
         when(idamClient.getUserDataByUserId(token, userId)).thenReturn(expectedResponse);
 
-        // Act
         UserDataResponse actualResponse = userDataService.getUserData(params);
 
-        // Assert
         assertNotNull(actualResponse);
         assertEquals(expectedResponse, actualResponse);
         verify(idamTokenGenerator, times(1)).generateIdamToken();
@@ -70,7 +67,6 @@ class UserDataServiceTest {
 
     @Test
     void shouldReturnUserDataByEmail() {
-        // Arrange
         String email = "test@example.com";
         UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
         when(params.userId()).thenReturn(null);
@@ -81,10 +77,8 @@ class UserDataServiceTest {
         when(idamTokenGenerator.generateIdamToken()).thenReturn(token);
         when(idamClient.getUserDataByEmail(token, email)).thenReturn(expectedResponse);
 
-        // Act
         UserDataResponse actualResponse = userDataService.getUserData(params);
 
-        // Assert
         assertNotNull(actualResponse);
         assertEquals(expectedResponse, actualResponse);
         verify(idamTokenGenerator, times(1)).generateIdamToken();
@@ -94,7 +88,6 @@ class UserDataServiceTest {
 
     @Test
     void shouldHandleExceptionGracefully() {
-        // Arrange
         String userId = "12345";
         UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
         when(params.userId()).thenReturn(userId);
@@ -104,7 +97,6 @@ class UserDataServiceTest {
         when(idamTokenGenerator.generateIdamToken()).thenReturn(token);
         when(idamClient.getUserDataByUserId(token, userId)).thenThrow(new RuntimeException("Service error"));
 
-        // Act & Assert
         RuntimeException exception =
             assertThrows(RuntimeException.class, () -> userDataService.getUserData(params));
         assertEquals("Service error", exception.getMessage());

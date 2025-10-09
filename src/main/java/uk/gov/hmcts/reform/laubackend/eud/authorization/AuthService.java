@@ -10,7 +10,6 @@ public class AuthService {
 
     private final AuthTokenValidator authTokenValidator;
 
-
     @Autowired
     public AuthService(final AuthTokenValidator authTokenValidator) {
         this.authTokenValidator = authTokenValidator;

@@ -90,7 +90,7 @@ public class UserDataGetApiSteps extends BaseSteps {
 
     @Step("Create a user to pass as param")
     public String createUserToPassAsParam() {
-        String userId = createNewUser();
+        String userId = createUser();
         Assert.assertNotNull("User Id is null",userId);
         return userId;
     }

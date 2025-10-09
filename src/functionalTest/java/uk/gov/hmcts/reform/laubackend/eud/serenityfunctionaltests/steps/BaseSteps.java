@@ -118,7 +118,7 @@ public class BaseSteps {
         return authorizationHeaderHelper.getServiceToken();
     }
 
-    protected String createNewUser() {
+    protected String createUser() {
         ExtractableResponse<Response> res =  databaseHelper.createUser();
         return res.path("id");
     }

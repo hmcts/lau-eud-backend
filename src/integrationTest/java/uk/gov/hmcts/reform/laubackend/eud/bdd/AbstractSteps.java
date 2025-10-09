@@ -57,9 +57,9 @@ public class AbstractSteps {
                                            .withBodyFile("UserData.json")));
 
         server.stubFor(get(urlPathMatching(USER_DATA_BY_EMAIL_PATH
-               + "(?:[A-Za-z0-9._%+-]|%[0-9A-Fa-f]{2})+"   // local-part (allow %-encoded)
-               + "(?:@|%40)"                                // '@' or '%40'
-               + "(?:[A-Za-z0-9-]+\\.)+"                    // domain labels
+               + "(?:[A-Za-z0-9._%+-]|%[0-9A-Fa-f]{2})+"
+               + "(?:@|%40)"
+               + "(?:[A-Za-z0-9-]+\\.)+"
                + "[A-Za-z]{2,63}$"))
                            .withHeader(AUTHORISATION_HEADER, containing("Bearer " + GOOD_TOKEN))
                            .willReturn(aResponse()

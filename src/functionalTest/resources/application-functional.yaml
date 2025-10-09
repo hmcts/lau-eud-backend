@@ -1,39 +1,5 @@
 targetInstance: ${TEST_URL:http://localhost:4553}
 
-server:
-  port: 4553
-
-management:
-  endpoint:
-    health:
-      show-details: "always"
-  endpoints:
-    web:
-      base-path: /
-      exposure:
-        include: health, info, prometheus
-
-#Application specific properties
-api-error-messages:
-  bad_request: Invalid Request
-  created: Successfully created
-  updated: Successfully updated
-  accepted: Success
-  internal_error: Unknown error occurred
-api-required-header-keys:
-  co-relationid: X-Correlation-Id
-api-schema-file:
-  submitanswer-schema: JsonSchema/submitAnswersSchema.json
-api-version-number: 1
-api-config-params:
-  number_of_days_limit: 90
-
 idam:
   s2s-auth:
     url: ${TEST_S2S_URL:http://localhost:4502}
-    secret-cs: ${S2S_LAU_FT_SECRET:AAAAAAAAAAAAAAAA}
-    name-cs: ${S2S_LAU_FT_NAME:lau_frontend}
-
-azure:
-  application-insights:
-    instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
