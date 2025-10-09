@@ -7,6 +7,7 @@ import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import uk.gov.hmcts.reform.laubackend.eud.response.UserDataResponse;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -44,5 +45,10 @@ public class UserDataGetSteps extends AbstractSteps {
             .isEqualTo("john111.smith111@example.org");
         assertThat(userDataResponse.getAccountStatus())
             .isEqualTo("ACTIVE");
+        String[] roles = {"citizen","caseworker-civil"};
+        assertThat(userDataResponse.getRoles())
+            .isEqualTo(List.of(roles));
+        assertThat(userDataResponse.getAccountCreationDate())
+            .isEqualTo("2023-06-21T13:28:40.966619Z");
     }
 }
