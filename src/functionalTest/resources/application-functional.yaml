@@ -1,11 +1,5 @@
 targetInstance: ${TEST_URL:http://localhost:4553}
 
 idam:
-  api:
-    port: ${IDAM_API_PORT:5000}
-    url: ${IDAM_API_URL:http://localhost:${idam.api.port}}
   s2s-auth:
-    url: ${S2S_URL:http://localhost:4502}
-  client:
-    id: ${IDAM_CLIENT_NAME:lau}
-    secret: ${IDAM_CLIENT_SECRET:idam-client-secret}
+    url: ${TEST_S2S_URL:http://localhost:4502}
