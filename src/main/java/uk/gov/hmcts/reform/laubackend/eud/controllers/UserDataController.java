@@ -20,7 +20,7 @@ import uk.gov.hmcts.reform.laubackend.eud.service.UserDataService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.eud.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
-import static uk.gov.hmcts.reform.laubackend.eud.utils.InputParamsVerifier.verifyUserDataGetRequestParams;
+import static uk.gov.hmcts.reform.laubackend.eud.utils.InputParamsVerifierHelper.verifyUserDataGetRequestParams;
 import static uk.gov.hmcts.reform.laubackend.eud.utils.NotEmptyInputParamsVerifier.verifyUserDataGetRequestParamsPresence;
 
 @Slf4j
@@ -44,16 +44,16 @@ public class UserDataController {
         content = { @Content(schema = @Schema(implementation = UserDataResponse.class))})
     @ApiResponse(
         responseCode = "400",
-        description = "Missing required parameter. userId or emailAddress is mandatory",
-        content = { @Content(schema = @Schema(implementation = UserDataResponse.class))})
+        description = "Missing required parameter. userId or emailAddress is mandatory")
     @ApiResponse(
         responseCode = "403",
-        description = "Forbidden",
-        content = { @Content(schema = @Schema(implementation = UserDataResponse.class))})
+        description = "Forbidden")
+    @ApiResponse(
+        responseCode = "404",
+        description = "Not Found")
     @ApiResponse(
         responseCode = "500",
-        description = "Internal Server Error",
-        content = { @Content(schema = @Schema(implementation = UserDataResponse.class))})
+        description = "Internal Server Error")
     @GetMapping(
         path = "/audit/userData",
         produces = APPLICATION_JSON_VALUE
@@ -72,11 +72,16 @@ public class UserDataController {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (final InvalidRequestException ire) {
-            log.error("getDeletedAccounts API call failed due to error - {}",
+            log.error("getUserData API call failed due to error - {}",
                       ire.getMessage(),
                       ire
             );
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            if (e.getMessage().contains("404 Not Found")) {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

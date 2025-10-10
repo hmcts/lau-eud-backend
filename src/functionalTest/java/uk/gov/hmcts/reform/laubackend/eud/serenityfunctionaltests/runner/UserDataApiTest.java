@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.Title;
 import net.serenitybdd.junit.runners.SerenityRunner;
-import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +27,7 @@ public class UserDataApiTest {
     public void assertHttpSuccessResponseCodeForCaseViewApi() throws Exception {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         String userId = userDataGetApiSteps.createUserToPassAsParam();
-        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(userId);
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(userId,"");
         Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
@@ -47,10 +46,10 @@ public class UserDataApiTest {
 
     @Test
     @Title("Assert response code of 403 for GET UserData Api service with Invalid ServiceAuthorization Token")
-    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetUserDataApi() throws JSONException {
+    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetUserDataApi() {
         String invalidServiceToken = userDataGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
         String userId = userDataGetApiSteps.createUserToPassAsParam();
-        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(userId);
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(userId,"");
         Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
             invalidServiceToken,
             queryParamMap
@@ -65,7 +64,7 @@ public class UserDataApiTest {
 
     @Test
     @Title("Assert response code of 400 for GET CaseActionApi with Empty Params")
-    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() throws JSONException {
+    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenEmptyParamsAreSuppliedForGetUserData();
         Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
@@ -74,5 +73,33 @@ public class UserDataApiTest {
         );
         String successOrFailure = userDataGetApiSteps.thenBadResponseIsReturned(response, 400);
         Assert.assertEquals("The assertion is not successful", TestConstants.SUCCESS,successOrFailure);
+    }
+
+    @Test
+    @Title("Assert response code of 404 for GET UserData API with valid headers and invalid request params")
+    public void assertHttpSuccessResponse404ForInvalidUserId()  {
+        String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
+            "1122334455","");
+        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+            authServiceToken,
+            queryParamMap
+        );
+        Assert.assertEquals("The assertion for GET UserData API response code 404 is not successful",
+                            404,response.getStatusCode());
+    }
+
+    @Test
+    @Title("Assert response code of 404 for GET UserData API with valid headers and invalid request params")
+    public void assertHttpSuccessResponse404ForInvalidEmail() {
+        String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
+        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
+            "","randomtest@test.com");
+        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+            authServiceToken,
+            queryParamMap
+        );
+        Assert.assertEquals("The assertion for GET UserData API response code 404 is not successful",
+                            404,response.getStatusCode());
     }
 }

@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.model.UserData
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants.SUCCESS;
 import static uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants.USER_DATA_ENDPOINT;
 
@@ -18,9 +19,10 @@ public class UserDataGetApiSteps extends BaseSteps {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDataGetApiSteps.class);
 
     @Step("When valid params are supplied for Get UserData API")
-    public Map<String, String> givenValidParamsAreSuppliedForGetUserData(String userId) {
+    public Map<String, String> givenValidParamsAreSuppliedForGetUserData(String userId, String email) {
         Map<String, String> queryParamMap = new ConcurrentHashMap<>();
         queryParamMap.put("userId", userId);
+        queryParamMap.put("email", email);
         return queryParamMap;
     }
 
@@ -38,17 +40,17 @@ public class UserDataGetApiSteps extends BaseSteps {
 
         for (String queryParam : inputQueryParamMap.keySet()) {
 
-            if ("userId".equals(queryParam)) {
+            if ("userId".equals(queryParam) && !isEmpty(inputQueryParamMap.get(queryParam))) {
                 String userId = userDataResponseVO.getUserId();
                 Assert.assertEquals(
                     "User Id is missing in the response",
                     inputQueryParamMap.get(queryParam), userId
                 );
-            } else if ("email".equals(queryParam)) {
-                String caseRef = userDataResponseVO.getEmail();
+            } else if ("email".equals(queryParam) && !isEmpty(inputQueryParamMap.get(queryParam))) {
+                String email = userDataResponseVO.getEmail();
                 Assert.assertEquals(
                     "email is missing in the response",
-                    inputQueryParamMap.get(queryParam), caseRef
+                    inputQueryParamMap.get(queryParam), email
                 );
 
             }

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.eud.dto.UserDataGetRequestParams;
-import uk.gov.hmcts.reform.laubackend.eud.parameter.ParameterResolver;
 import uk.gov.hmcts.reform.laubackend.eud.response.UserDataResponse;
 import uk.gov.hmcts.reform.laubackend.eud.service.remote.client.IdamClient;
 import uk.gov.hmcts.reform.laubackend.eud.utils.IdamTokenGenerator;
@@ -18,29 +17,13 @@ public class UserDataService {
 
     private final IdamClient client;
     private final IdamTokenGenerator idamTokenGenerator;
-    private final ParameterResolver parameterResolver;
 
     public UserDataResponse getUserData(final UserDataGetRequestParams params) {
-        UserDataResponse userDataResponse = null;
-        try {
-            if (notNullOrEmpty(params.userId())) {
-                userDataResponse = client.getUserDataByUserId(
-                    idamTokenGenerator.generateIdamToken(), params.userId()
-                );
-            } else if (notNullOrEmpty(params.email())) {
-                userDataResponse = client.getUserDataByEmail(
-                    idamTokenGenerator.generateIdamToken(), params.email()
-                );
-            }
-        } catch (Exception e) {
-            log.error("UserDataService.getUserData threw exception: {}", e.getMessage(), e);
-            throw e;
+        boolean hasUserId = !isEmpty(params.userId());
+        String token = idamTokenGenerator.generateIdamToken();
+        if (hasUserId) {
+            return client.getUserDataByUserId(token, params.userId().trim());
         }
-        return userDataResponse;
+        return client.getUserDataByEmail(token, params.email().trim());
     }
-
-    boolean notNullOrEmpty(final String param) {
-        return param != null && !isEmpty(param);
-    }
-
 }
