@@ -43,8 +43,8 @@ class UserDataServiceTest {
     void shouldReturnUserDataByUserId() {
         String userId = "12345";
         UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
-        when(params.userId()).thenReturn(userId);
-        when(params.email()).thenReturn(null);
+        when(params.getUserId()).thenReturn(userId);
+        when(params.getEmail()).thenReturn(null);
 
         UserDataResponse expectedResponse = new UserDataResponse();
         expectedResponse.setUserId(userId);
@@ -69,8 +69,8 @@ class UserDataServiceTest {
     void shouldReturnUserDataByEmail() {
         String email = "test@example.com";
         UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
-        when(params.userId()).thenReturn(null);
-        when(params.email()).thenReturn(email);
+        when(params.getUserId()).thenReturn(null);
+        when(params.getEmail()).thenReturn(email);
 
         String token = "mock-token";
         UserDataResponse expectedResponse = new UserDataResponse();
@@ -90,8 +90,8 @@ class UserDataServiceTest {
     void shouldHandleExceptionGracefully() {
         String userId = "12345";
         UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
-        when(params.userId()).thenReturn(userId);
-        when(params.email()).thenReturn(null);
+        when(params.getUserId()).thenReturn(userId);
+        when(params.getEmail()).thenReturn(null);
 
         String token = "mock-token";
         when(idamTokenGenerator.generateIdamToken()).thenReturn(token);

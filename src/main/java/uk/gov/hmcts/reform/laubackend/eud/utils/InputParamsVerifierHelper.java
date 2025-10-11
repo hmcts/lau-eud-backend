@@ -15,7 +15,7 @@ public final class InputParamsVerifierHelper {
 
     public static void verifyUserDataGetRequestParams(final UserDataGetRequestParams params)
         throws InvalidRequestException {
-        String userId = params.userId();
+        String userId = params.getUserId();
         if (!isEmpty(userId) && userId.length() > 64) {
             throw new InvalidRequestException(appendExceptionParameter(
                 USERID_GET_EXCEPTION_MESSAGE, userId), BAD_REQUEST);

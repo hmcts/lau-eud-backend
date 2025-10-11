@@ -19,11 +19,11 @@ public class UserDataService {
     private final IdamTokenGenerator idamTokenGenerator;
 
     public UserDataResponse getUserData(final UserDataGetRequestParams params) {
-        boolean hasUserId = !isEmpty(params.userId());
+        boolean hasUserId = !isEmpty(params.getUserId());
         String token = idamTokenGenerator.generateIdamToken();
         if (hasUserId) {
-            return client.getUserDataByUserId(token, params.userId().trim());
+            return client.getUserDataByUserId(token, params.getUserId().trim());
         }
-        return client.getUserDataByEmail(token, params.email().trim());
+        return client.getUserDataByEmail(token, params.getEmail().trim());
     }
 }

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,6 @@ import uk.gov.hmcts.reform.laubackend.eud.service.UserDataService;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.laubackend.eud.constants.CommonConstants.SERVICE_AUTHORISATION_HEADER;
 import static uk.gov.hmcts.reform.laubackend.eud.utils.InputParamsVerifierHelper.verifyUserDataGetRequestParams;
-import static uk.gov.hmcts.reform.laubackend.eud.utils.NotEmptyInputParamsVerifier.verifyUserDataGetRequestParamsPresence;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,10 +61,9 @@ public class UserDataController {
     public ResponseEntity<UserDataResponse> getUserData(
         @Parameter(name = "Service Authorization", example = "Bearer eyJ0eXAiOiJK.........")
         @RequestHeader(value = SERVICE_AUTHORISATION_HEADER) String authToken,
-        UserDataGetRequestParams requestParams
+        @Valid UserDataGetRequestParams requestParams
     ) {
         try {
-            verifyUserDataGetRequestParamsPresence(requestParams);
             verifyUserDataGetRequestParams(requestParams);
 
             final UserDataResponse response = userDataService.getUserData(requestParams);

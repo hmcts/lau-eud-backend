@@ -1,10 +1,25 @@
 package uk.gov.hmcts.reform.laubackend.eud.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.validation.constraints.AssertTrue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
+@Getter
+@Setter
+@AllArgsConstructor
 @Schema(description = "Data model for the User Data request")
-public record UserDataGetRequestParams(
-    @RequestParam String userId,
-    @RequestParam String email) {
+public class UserDataGetRequestParams {
+    private String userId;
+    private String email;
+
+    @AssertTrue(message = "At least one of userId or email must be provided")
+    public boolean isAtLeastOneProvided() {
+        return isNotEmpty(userId) || isNotEmpty(email);
+    }
 }
+
+

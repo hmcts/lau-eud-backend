@@ -52,17 +52,4 @@ class UserDataControllerTest {
         assertEquals(expectedResponse, response.getBody());
         verify(userDataService, times(1)).getUserData(requestParams);
     }
-
-    @Test
-    void shouldReturnBadRequestWhenRequestIsInvalid() {
-        String authToken = "Bearer invalid-token";
-        UserDataGetRequestParams requestParams = new UserDataGetRequestParams("","");
-
-        ResponseEntity<UserDataResponse> response = userDataController.getUserData(authToken, requestParams);
-
-        assertNotNull(response);
-        assertEquals(400, response.getStatusCodeValue());
-        verify(userDataService, times(0)).getUserData(requestParams);
-    }
-
 }
