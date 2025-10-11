@@ -1,0 +1,5 @@
+targetInstance: ${TEST_URL:http://localhost:4553}
+
+idam:
+  s2s-auth:
+    url: ${TEST_S2S_URL:http://localhost:4502}

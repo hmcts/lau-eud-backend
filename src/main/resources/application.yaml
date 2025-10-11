@@ -63,3 +63,14 @@ security:
 azure:
   application-insights:
     instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
+
+idam:
+  s2s-auth:
+    url: ${S2S_URL:http://localhost:4502}
+  api:
+    url: ${IDAM_API_URL:http://localhost:5000}
+  client:
+    id: ${IDAM_CLIENT_NAME:lau}
+    secret: ${IDAM_CLIENT_SECRET:12345678}
+
+authorised.services: lau_frontend
