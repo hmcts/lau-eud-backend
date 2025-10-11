@@ -55,7 +55,7 @@ public class UserDataApiTest {
             queryParamMap
         );
         String successOrFailure = userDataGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
-        Assert.assertEquals("CaseAction API response code 403 assertion is not successful",
+        Assert.assertEquals("Get UserData API response code 403 assertion is not successful",
                             TestConstants.SUCCESS,successOrFailure
 
         );
@@ -72,7 +72,8 @@ public class UserDataApiTest {
             queryParamMap
         );
         String successOrFailure = userDataGetApiSteps.thenBadResponseIsReturned(response, 400);
-        Assert.assertEquals("The assertion is not successful", TestConstants.SUCCESS,successOrFailure);
+        Assert.assertEquals("Get UserData API response code 400 assertion is not successful",
+                            TestConstants.SUCCESS,successOrFailure);
     }
 
     @Test
@@ -85,7 +86,7 @@ public class UserDataApiTest {
             authServiceToken,
             queryParamMap
         );
-        Assert.assertEquals("The assertion for GET UserData API response code 404 is not successful",
+        Assert.assertEquals("The assertion for GET UserData API using userId response code 404 is not successful",
                             404,response.getStatusCode());
     }
 
@@ -99,7 +100,7 @@ public class UserDataApiTest {
             authServiceToken,
             queryParamMap
         );
-        Assert.assertEquals("The assertion for GET UserData API response code 404 is not successful",
+        Assert.assertEquals("The assertion for GET UserData API using email response code 404 is not successful",
                             404,response.getStatusCode());
     }
 }

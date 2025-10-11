@@ -19,7 +19,6 @@ class ParameterResolverTest {
         ReflectionTestUtils.setField(resolver, IDAM_API_URL, "http://locahost:5000");
         ReflectionTestUtils.setField(resolver, CLIENT_ID, "client id");
         ReflectionTestUtils.setField(resolver, CLIENT_SECRET, "client secret");
-
     }
 
     @Test
