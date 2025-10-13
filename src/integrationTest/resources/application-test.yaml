@@ -1,0 +1,15 @@
+#As Not using database at the monet exclude jpa, jdbc and hibernate auto configuration
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+  flyway:
+    enabled: false
+
+idam:
+  s2s-auth:
+    url: ${S2S_URL:http://localhost:4554}
+  api:
+    url: ${IDAM_API_URL:http://localhost:4554}

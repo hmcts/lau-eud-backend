@@ -32,6 +32,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 withPipeline(type, product, component) {
+    env.TEST_URL = 'http://lau-eud-backend-aat.service.core-compute-aat.internal'
+
     loadVaultSecrets(secrets)
 
     before('buildinfra:aat') {
