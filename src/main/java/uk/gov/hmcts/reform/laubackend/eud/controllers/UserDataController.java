@@ -65,7 +65,6 @@ public class UserDataController {
         try {
 
             final UserDataResponse response = userDataService.getUserData(requestParams);
-
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (FeignException.NotFound e) {

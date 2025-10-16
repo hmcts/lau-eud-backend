@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.laubackend.eud.exceptions;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -24,12 +24,16 @@ class GlobalExceptionHandlerTest {
         MethodArgumentNotValidException exception = mock(MethodArgumentNotValidException.class);
         when(exception.getBindingResult()).thenReturn(bindingResult);
 
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getRequestURI()).thenReturn("/test/path");
+
         GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
-        ResponseEntity<String> response = handler.handleValidationException(exception);
+        ProblemDetail pd = handler.handleValidationException(exception, request);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("userId must not be empty", response.getBody());
+        assertEquals("Bad Request", pd.getTitle());
+        assertEquals("One or more fields are invalid.", pd.getDetail());
+        assertEquals(400, pd.getStatus());
     }
 }
 
