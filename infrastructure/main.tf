@@ -124,3 +124,15 @@ resource "random_password" "password" {
   length           = 32
   override_special = "()-_"
 }
+
+resource "azurerm_key_vault_secret" "LAU-SYSTEM-USER" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+  name         = "lau-system-user-username"
+  value        = var.lau-system-user-username
+}
+
+resource "azurerm_key_vault_secret" "LAU-SYSTEM-PASSWORD" {
+  key_vault_id = data.azurerm_key_vault.key_vault.id
+  name         = "lau-system-user-password"
+  value        = random_password.password.result
+}
