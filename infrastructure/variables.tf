@@ -80,3 +80,8 @@ variable "pgsql_delegated_subnet_id" {
   default     = ""
 }
 
+variable "lau-system-user-username" {
+  description = "Email address of system user for lau"
+  type        = string
+  default     = "lau-system.user@hmcts.net"
+}
