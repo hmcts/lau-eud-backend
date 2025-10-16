@@ -128,7 +128,7 @@ resource "random_password" "password" {
 resource "azurerm_key_vault_secret" "LAU-SYSTEM-USER" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "lau-system-user-username"
-  value        = var.eud_backend_system_user_username
+  value        = var.lau-system-user-username
 }
 
 resource "azurerm_key_vault_secret" "LAU-SYSTEM-PASSWORD" {
