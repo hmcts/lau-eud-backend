@@ -1,0 +1,11 @@
+{
+  "id": "13e31622-edea-493c-8240-9b780c9d6111",
+  "email": "john111.smith111@example.org",
+  "roles": [
+    "citizen",
+    "caseworker-civil"
+  ],
+  "accountStatus": "ACTIVE",
+  "createDate": "2023-06-21T13:28:40.966619Z"
+}
+
