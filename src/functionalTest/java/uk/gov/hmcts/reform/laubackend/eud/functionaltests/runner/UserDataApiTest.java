@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.runner;
+package uk.gov.hmcts.reform.laubackend.eud.functionaltests.runner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
@@ -8,9 +8,10 @@ import net.serenitybdd.junit.runners.SerenityRunner;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.model.UserDataResponseVO;
-import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.steps.UserDataGetApiSteps;
-import uk.gov.hmcts.reform.laubackend.eud.serenityfunctionaltests.utils.TestConstants;
+import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserDataResponse;
+import uk.gov.hmcts.reform.laubackend.eud.functionaltests.steps.UserDataGetApiSteps;
+import uk.gov.hmcts.reform.laubackend.eud.functionaltests.utils.TestConstants;
 
 import java.util.Map;
 
@@ -27,18 +28,22 @@ public class UserDataApiTest {
     public void assertHttpSuccessResponseCodeForCaseViewApi() throws Exception {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         String userId = userDataGetApiSteps.createUserToPassAsParam();
-        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(userId,"");
-        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+        Map<String, String> queryParamMap = userDataGetApiSteps
+            .givenValidParamsAreSuppliedForGetUserData(userId,"");
+        ResponseEntity<UserDataResponse> responseEntity = userDataGetApiSteps
+            .whenTheGetUserDataIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
         );
+
         ObjectMapper objectMapper = new ObjectMapper();
-        UserDataResponseVO userDataResponseVO = objectMapper.readValue(
-            response.getBody().asString(),
-            UserDataResponseVO.class
+        UserDataResponse actualResponse = objectMapper.convertValue(
+            responseEntity.getBody(),
+            UserDataResponse.class
         );
-        userDataGetApiSteps.thenTheGetUserDataResponseParamsMatchesTheInput(queryParamMap, userDataResponseVO);
-        String successOrFailure = userDataGetApiSteps.thenASuccessResposeIsReturned(response);
+
+        userDataGetApiSteps.thenTheGetUserDataResponseParamsMatchesTheInput(queryParamMap, actualResponse);
+        String successOrFailure = userDataGetApiSteps.thenASuccessResposeIsReturned(responseEntity);
         Assert.assertEquals("The assertion for GET UserData API response code 200 is not successful",
                             TestConstants.SUCCESS,successOrFailure);
         userDataGetApiSteps.deleteTheUser();
@@ -49,8 +54,10 @@ public class UserDataApiTest {
     public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetUserDataApi() {
         String invalidServiceToken = userDataGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
         String userId = userDataGetApiSteps.createUserToPassAsParam();
-        Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(userId,"");
-        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+        Map<String, String> queryParamMap = userDataGetApiSteps
+            .givenValidParamsAreSuppliedForGetUserData(userId,"");
+        Response response = userDataGetApiSteps
+            .whenTheGetUserDataIsInvokedWithTheInvalidParams(
             invalidServiceToken,
             queryParamMap
         );
@@ -67,7 +74,8 @@ public class UserDataApiTest {
     public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenEmptyParamsAreSuppliedForGetUserData();
-        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+        Response response = userDataGetApiSteps
+            .whenTheGetUserDataIsInvokedWithTheInvalidParams(
             authServiceToken,
             queryParamMap
         );
@@ -82,12 +90,15 @@ public class UserDataApiTest {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
             "1122334455","");
-        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+        ResponseEntity<UserDataResponse> responseEntity = userDataGetApiSteps
+            .whenTheGetUserDataIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
         );
+        UserDataResponse userDataResponse = responseEntity.getBody();
+        Integer status = userDataResponse.meta().get("idam").get("responseCode");
         Assert.assertEquals("The assertion for GET UserData API using userId response code 404 is not successful",
-                            404,response.getStatusCode());
+                            404,status.intValue());
     }
 
     @Test
@@ -96,12 +107,15 @@ public class UserDataApiTest {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
             "","randomtest@test.com");
-        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+        ResponseEntity<UserDataResponse> responseEntity = userDataGetApiSteps
+            .whenTheGetUserDataIsInvokedWithTheGivenParams(
             authServiceToken,
             queryParamMap
         );
+        UserDataResponse userDataResponse = responseEntity.getBody();
+        Integer status = userDataResponse.meta().get("idam").get("responseCode");
         Assert.assertEquals("The assertion for GET UserData API using email response code 404 is not successful",
-                            404,response.getStatusCode());
+                            404,status.intValue());
     }
 
     @Test
@@ -110,7 +124,7 @@ public class UserDataApiTest {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
                 "6f86055-e978-4758-8e65-c0373cd77fc6f6f86055-e978-4758-8e65-c0373cd77fc6","");
-        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheInvalidParams(
                 authServiceToken,
                 queryParamMap
         );
@@ -124,7 +138,7 @@ public class UserDataApiTest {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
                 "","");
-        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheGivenParams(
+        Response response = userDataGetApiSteps.whenTheGetUserDataIsInvokedWithTheInvalidParams(
                 authServiceToken,
                 queryParamMap
         );
