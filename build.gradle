@@ -157,7 +157,7 @@ repositories {
 def versions = [
   flywaydb          : '11.15.0',
   lombok            : '1.18.42',
-  cucumber          : '7.30.0',
+  cucumber          : '7.31.0',
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
   serenity          : '4.2.34'
