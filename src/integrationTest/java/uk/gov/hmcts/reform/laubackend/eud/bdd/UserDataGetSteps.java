@@ -5,6 +5,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import uk.gov.hmcts.reform.laubackend.eud.response.ContactInformationResponse;
 import uk.gov.hmcts.reform.laubackend.eud.response.UserDataResponse;
 
 import java.util.List;
@@ -39,16 +40,36 @@ public class UserDataGetSteps extends AbstractSteps {
 
     private void assertObject(final UserDataResponse userDataResponse) {
         assertThat(userDataResponse).isNotNull();
-        assertThat(userDataResponse.getUserId())
+        assertThat(userDataResponse.userId())
             .isEqualTo("13e31622-edea-493c-8240-9b780c9d6111");
-        assertThat(userDataResponse.getEmail())
+        assertThat(userDataResponse.email())
             .isEqualTo("john111.smith111@example.org");
-        assertThat(userDataResponse.getAccountStatus())
+        assertThat(userDataResponse.accountStatus())
             .isEqualTo("ACTIVE");
         String[] roles = {"citizen","caseworker-civil"};
-        assertThat(userDataResponse.getRoles())
+        assertThat(userDataResponse.roles())
             .isEqualTo(List.of(roles));
-        assertThat(userDataResponse.getAccountCreationDate())
+        assertThat(userDataResponse.accountCreationDate())
             .isEqualTo("2023-06-21T13:28:40.966619Z");
+        List<ContactInformationResponse>  contactInformationResponses =
+            userDataResponse.organisationalAddress();
+        assertThat(contactInformationResponses).isNotNull();
+        assertThat(contactInformationResponses.getFirst().addressLine1())
+            .isEqualTo("addressLine1");
+        assertThat(contactInformationResponses.getFirst().addressLine2())
+            .isEqualTo("addressLine2");
+        assertThat(contactInformationResponses.getFirst().addressLine3())
+            .isEqualTo("addressLine3");
+        assertThat(contactInformationResponses.getFirst().county())
+            .isEqualTo("county");
+        assertThat(contactInformationResponses.getFirst().country())
+            .isEqualTo("country");
+        assertThat(contactInformationResponses.getFirst().postCode())
+            .isEqualTo("BT1 1TT");
+        Map<String, Map<String, Integer>> meta = userDataResponse.meta();
+        assertThat(meta.get("idam").get("responseCode"))
+            .isEqualTo(200);
+        assertThat(meta.get("refdata").get("responseCode"))
+            .isEqualTo(200);
     }
 }
