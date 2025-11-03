@@ -39,6 +39,7 @@ class UserDataControllerTest {
             "test@test.com",
             "ACTIVE",
             null,
+            null,
             new ArrayList<String>(Arrays.asList("role1", "role2")),
             null,
             null

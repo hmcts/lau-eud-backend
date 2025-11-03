@@ -19,6 +19,9 @@ public record IdamUserResponse(
     @Schema(description = "Account Status of user")
     String accountStatus,
 
+    @Schema(description = "RecordType of user")
+    String recordType,
+
     @Schema(description = "User's account creation timestamp in iso-8601-date-and-time-format.")
     @JsonAlias("createDate")
     String accountCreationDate,
@@ -31,6 +34,7 @@ public record IdamUserResponse(
     private static final long serialVersionUID = 1L;
 
     public static IdamUserResponse empty() {
-        return new IdamUserResponse(null, null, null, null, null);
+        return new IdamUserResponse(null, null, null,
+                null, null,null);
     }
 }

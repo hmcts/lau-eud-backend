@@ -11,9 +11,10 @@ import java.util.Map;
 public record UserDataResponse(
     @JsonProperty("userId") String userId,
     @JsonProperty("email") String email,
-    @JsonProperty("roles") List<String> roles,
     @JsonProperty("accountStatus") String accountStatus,
+    @JsonProperty("recordType") String recordType,
     @JsonProperty("accountCreationDate") String accountCreationDate,
+    @JsonProperty("roles") List<String> roles,
     @JsonProperty("organisationalAddress") List<ContactInformationResponse> organisationalAddress,
     @JsonProperty("meta") Map<String, Map<String, Integer>> meta
 ) {}

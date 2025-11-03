@@ -46,6 +46,8 @@ public class UserDataGetSteps extends AbstractSteps {
             .isEqualTo("john111.smith111@example.org");
         assertThat(userDataResponse.accountStatus())
             .isEqualTo("ACTIVE");
+        assertThat(userDataResponse.recordType())
+            .isEqualTo("LIVE");
         String[] roles = {"citizen","caseworker-civil"};
         assertThat(userDataResponse.roles())
             .isEqualTo(List.of(roles));

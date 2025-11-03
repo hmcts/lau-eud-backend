@@ -110,6 +110,7 @@ public class UserDataService {
             idamUserData.userId(),
             idamUserData.email(),
             idamUserData.accountStatus(),
+            idamUserData.recordType(),
             idamUserData.accountCreationDate(),
             idamUserData.roles(),
             organisation.organisationalAddress(),
