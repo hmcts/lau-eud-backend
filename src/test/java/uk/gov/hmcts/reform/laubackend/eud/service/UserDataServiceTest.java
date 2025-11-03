@@ -36,15 +36,16 @@ import static org.mockito.Mockito.when;
 
 class UserDataServiceTest {
 
-    public static final String ACTIVE = "ACTIVE";
-    static final String IDAM = "idam";
-    static final String REF_DATA = "refdata";
-    static final String RESPONSE_CODE = "responseCode";
-    static final String IDAM_TOKEN = "mock-token";
-    static final String REF_DATA_TOKEN = "mock-ref-token";
-    static final String SERVICE_TOKEN = "mock-service-token";
-    static final String ROLE_1 = "role1";
-    static final String ROLE_2 = "role2";
+    private static final String ACTIVE = "ACTIVE";
+    private static final String IDAM = "idam";
+    private static final String REF_DATA = "refdata";
+    private static final String RESPONSE_CODE = "responseCode";
+    private static final String IDAM_TOKEN = "mock-token";
+    private static final String REF_DATA_TOKEN = "mock-ref-token";
+    private static final String SERVICE_TOKEN = "mock-service-token";
+    private static final String ROLE_1 = "role1";
+    private static final String ROLE_2 = "role2";
+    private static final String RECORD_TYPE = "LIVE";
 
     @Mock
     private Executor executor;
@@ -97,6 +98,7 @@ class UserDataServiceTest {
             userId,
             "test@test.com",
             ACTIVE,
+            RECORD_TYPE,
             null, // accountCreationDate if not needed
             List.of(ROLE_1, ROLE_2)
         );
@@ -116,6 +118,7 @@ class UserDataServiceTest {
             userId,
             "test@test.com",
             ACTIVE,
+            RECORD_TYPE,
             null,
             new ArrayList<String>(Arrays.asList(ROLE_1, ROLE_2)),
             contactInfoList,
@@ -159,7 +162,8 @@ class UserDataServiceTest {
             "14567",
             "test@example.com",
             ACTIVE,
-            null, // accountCreationDate if not needed
+            RECORD_TYPE,
+            null,
             List.of(ROLE_1, ROLE_2)
         );
         OrganisationResponse orgResponse = new OrganisationResponse(contactInfoList);
@@ -178,6 +182,7 @@ class UserDataServiceTest {
             "14567",
             "test@example.com",
             ACTIVE,
+            RECORD_TYPE,
             null,
             new ArrayList<String>(Arrays.asList(ROLE_1, ROLE_2)),
             contactInfoList,

@@ -17,6 +17,9 @@ public record UserDataResponse(
     @Schema(description = "Account Status of user")
     String accountStatus,
 
+    @Schema(description = "RecordType of user")
+    String recordType,
+
     @Schema(description = "User's account creation timestamp in iso-8601-date-and-time-format.")
     String accountCreationDate,
 
