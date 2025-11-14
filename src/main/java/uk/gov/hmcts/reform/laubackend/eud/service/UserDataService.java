@@ -32,8 +32,9 @@ public class UserDataService {
     @Qualifier("userDataExecutor")
     private final Executor executor;
 
-    static final String IDAM = "idam";
-    static final String REF_DATA = "refdata";
+    public static final String IDAM = "idam";
+    public static final String REF_DATA = "refdata";
+    public static final String RESPONSE_CODE_STR = "responseCode";
 
     public UserDataResponse getUserData(final UserDataGetRequestParams params) {
         boolean hasUserId = params.getUserId() != null;
@@ -55,11 +56,10 @@ public class UserDataService {
             idamF = callAsync(IDAM,    () -> idamClient.getUserDataByEmail(idamToken, params.getEmail()), executor);
 
             refDataF = idamF.thenCompose(idam -> {
-                var body = idam.body;
-                var userId = body != null ? body.userId() : null;
+                String userId = idam.body != null ? idam.body.userId() : null;
 
                 if (userId != null && !userId.isBlank()) {
-                    var trimmed = userId.trim();
+                    String trimmed = userId.trim();
                     return callAsync(REF_DATA,
                         () -> refDataClient.getOrganisationDetailsByUserId(refDataToken, serviceToken, trimmed),
                                      executor);
@@ -73,8 +73,8 @@ public class UserDataService {
         CallResult<OrganisationResponse> ref = refDataF.join();
 
         Map<String, Map<String, Integer>> meta = new LinkedHashMap<>();
-        meta.put(IDAM, Map.of("responseCode", idam.responseCode));
-        meta.put(REF_DATA, Map.of("responseCode", ref.responseCode));
+        meta.put(IDAM, Map.of(RESPONSE_CODE_STR, idam.responseCode));
+        meta.put(REF_DATA, Map.of(RESPONSE_CODE_STR, ref.responseCode));
 
         // Build final response + minimal meta and return
         return aggregateResponses(

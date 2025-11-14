@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.laubackend.eud.service;
 
+import feign.FeignException;
+import feign.Request;
+import feign.RequestTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,8 +19,6 @@ import uk.gov.hmcts.reform.laubackend.eud.service.remote.client.RefDataClient;
 import uk.gov.hmcts.reform.laubackend.eud.utils.IdamTokenGenerator;
 import uk.gov.hmcts.reform.laubackend.eud.utils.ServiceTokenGenerator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -33,13 +34,13 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.laubackend.eud.service.UserDataService.IDAM;
+import static uk.gov.hmcts.reform.laubackend.eud.service.UserDataService.REF_DATA;
+import static uk.gov.hmcts.reform.laubackend.eud.service.UserDataService.RESPONSE_CODE_STR;
 
 class UserDataServiceTest {
 
     private static final String ACTIVE = "ACTIVE";
-    private static final String IDAM = "idam";
-    private static final String REF_DATA = "refdata";
-    private static final String RESPONSE_CODE = "responseCode";
     private static final String IDAM_TOKEN = "mock-token";
     private static final String REF_DATA_TOKEN = "mock-ref-token";
     private static final String SERVICE_TOKEN = "mock-service-token";
@@ -65,6 +66,10 @@ class UserDataServiceTest {
     @InjectMocks
     private UserDataService userDataService;
 
+    private String userId = "99999";
+    private String email = "test@example.com";
+    private UserDataGetRequestParams params;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -73,40 +78,27 @@ class UserDataServiceTest {
             r.run();
             return null;
         }).when(executor).execute(any());
+        params = mock(UserDataGetRequestParams.class);
+        when(params.getUserId()).thenReturn(userId);
+        when(params.getEmail()).thenReturn(null);
+
+        when(idamTokenGenerator.generateIdamToken()).thenReturn(IDAM_TOKEN);
+        when(idamTokenGenerator.generateRefDataToken()).thenReturn(REF_DATA_TOKEN);
+        when(serviceTokenGenerator.generateServiceToken()).thenReturn(SERVICE_TOKEN);
     }
 
     @Test
     void shouldReturnUserDataByUserId() {
-        String userId = "12345";
-        UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
-        when(params.getUserId()).thenReturn(userId);
-        when(params.getEmail()).thenReturn(null);
-
-        List<ContactInformationResponse> contactInfoList = new ArrayList<>();
-        ContactInformationResponse contactInfo = new ContactInformationResponse(
-            "Org details",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
-        );
-        contactInfoList.add(contactInfo);
-
         IdamUserResponse idamUserResponse = new IdamUserResponse(
             userId,
-            "test@test.com",
+            email,
             ACTIVE,
             RECORD_TYPE,
             null, // accountCreationDate if not needed
             List.of(ROLE_1, ROLE_2)
         );
-        OrganisationResponse orgResponse = new OrganisationResponse(contactInfoList);
-
-        when(idamTokenGenerator.generateIdamToken()).thenReturn(IDAM_TOKEN);
-        when(idamTokenGenerator.generateRefDataToken()).thenReturn(REF_DATA_TOKEN);
-        when(serviceTokenGenerator.generateServiceToken()).thenReturn(SERVICE_TOKEN);
+        ContactInformationResponse contactInfo = new ContactInformationResponse("Org details", "", "", "", "", "", "");
+        OrganisationResponse orgResponse = new OrganisationResponse(List.of(contactInfo));
 
         when(idamClient.getUserDataByUserId(IDAM_TOKEN, userId)).thenReturn(ResponseEntity.ok(idamUserResponse));
         when(refDataClient.getOrganisationDetailsByUserId(REF_DATA_TOKEN, SERVICE_TOKEN, userId))
@@ -116,21 +108,18 @@ class UserDataServiceTest {
 
         UserDataResponse expectedAggregated = new UserDataResponse(
             userId,
-            "test@test.com",
+            email,
             ACTIVE,
             RECORD_TYPE,
             null,
-            new ArrayList<String>(Arrays.asList(ROLE_1, ROLE_2)),
-            contactInfoList,
+            List.of(ROLE_1, ROLE_2),
+            List.of(contactInfo),
             null
         );
 
         assertNotNull(actualResponse);
         assertUserDataResponseEquals(expectedAggregated, actualResponse);
-        Map<String, Map<String, Integer>> meta = actualResponse.meta();
-        assertNotNull(meta);
-        assertEquals(200, meta.get(IDAM).get(RESPONSE_CODE));
-        assertEquals(200, meta.get(REF_DATA).get(RESPONSE_CODE));
+        assertMetaDetails(actualResponse, 200, 200);
         verify(idamTokenGenerator, times(1)).generateIdamToken();
         verify(idamTokenGenerator, times(1)).generateRefDataToken();
         verify(serviceTokenGenerator, times(1)).generateServiceToken();
@@ -141,12 +130,9 @@ class UserDataServiceTest {
 
     @Test
     void shouldReturnUserDataByEmail() {
-        String email = "test@example.com";
-        UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
         when(params.getUserId()).thenReturn(null);
         when(params.getEmail()).thenReturn(email);
 
-        List<ContactInformationResponse> contactInfoList = new ArrayList<>();
         ContactInformationResponse contactInfo = new ContactInformationResponse(
             "Org details",
             "",
@@ -156,21 +142,16 @@ class UserDataServiceTest {
             "",
             ""
         );
-        contactInfoList.add(contactInfo);
 
         IdamUserResponse idamUserResponse = new IdamUserResponse(
             "14567",
-            "test@example.com",
+            email,
             ACTIVE,
             RECORD_TYPE,
             null,
             List.of(ROLE_1, ROLE_2)
         );
-        OrganisationResponse orgResponse = new OrganisationResponse(contactInfoList);
-
-        when(idamTokenGenerator.generateIdamToken()).thenReturn(IDAM_TOKEN);
-        when(idamTokenGenerator.generateRefDataToken()).thenReturn(REF_DATA_TOKEN);
-        when(serviceTokenGenerator.generateServiceToken()).thenReturn(SERVICE_TOKEN);
+        OrganisationResponse orgResponse = new OrganisationResponse(List.of(contactInfo));
 
         when(idamClient.getUserDataByEmail(IDAM_TOKEN, email)).thenReturn(ResponseEntity.ok(idamUserResponse));
         when(refDataClient.getOrganisationDetailsByUserId(REF_DATA_TOKEN, SERVICE_TOKEN, idamUserResponse.userId()))
@@ -180,23 +161,18 @@ class UserDataServiceTest {
 
         UserDataResponse expectedAggregated = new UserDataResponse(
             "14567",
-            "test@example.com",
+            email,
             ACTIVE,
             RECORD_TYPE,
             null,
-            new ArrayList<String>(Arrays.asList(ROLE_1, ROLE_2)),
-            contactInfoList,
+            List.of(ROLE_1, ROLE_2),
+            List.of(contactInfo),
             null
         );
 
         assertNotNull(actualResponse);
         assertUserDataResponseEquals(expectedAggregated, actualResponse);
-
-        Map<String, Map<String, Integer>> meta = actualResponse.meta();
-        assertNotNull(meta);
-        assertEquals(200, meta.get(IDAM).get(RESPONSE_CODE));
-        assertEquals(200, meta.get(REF_DATA).get(RESPONSE_CODE));
-
+        assertMetaDetails(actualResponse, 200, 200);
         verify(idamTokenGenerator, times(1)).generateIdamToken();
         verify(idamClient, times(1)).getUserDataByEmail(IDAM_TOKEN, email);
         verify(idamClient, never()).getUserDataByUserId(anyString(), anyString());
@@ -204,64 +180,110 @@ class UserDataServiceTest {
 
     @Test
     void shouldHandleNullBodyAndReturnEmptyResponseWithMeta() {
-        String userId = "99999";
-        UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
-        when(params.getUserId()).thenReturn(userId);
-        when(params.getEmail()).thenReturn(null);
-
-        when(idamTokenGenerator.generateIdamToken()).thenReturn(IDAM_TOKEN);
-        when(idamTokenGenerator.generateRefDataToken()).thenReturn(REF_DATA_TOKEN);
-        when(serviceTokenGenerator.generateServiceToken()).thenReturn(SERVICE_TOKEN);
-
         when(idamClient.getUserDataByUserId(IDAM_TOKEN, userId)).thenReturn(ResponseEntity.ok(null));
         when(refDataClient.getOrganisationDetailsByUserId(REF_DATA_TOKEN, SERVICE_TOKEN, userId))
             .thenReturn(ResponseEntity.ok(null));
 
         UserDataResponse actualResponse = userDataService.getUserData(params);
 
-        assertNotNull(actualResponse);
-        assertNull(actualResponse.userId());
-        assertNull(actualResponse.email());
-        assertNull(actualResponse.accountStatus());
-        assertNull(actualResponse.roles());
-        assertNull(actualResponse.organisationalAddress());
-
-        Map<String, Map<String, Integer>> meta = actualResponse.meta();
-        assertNotNull(meta);
-        assertEquals(200, meta.get(IDAM).get(RESPONSE_CODE));
-        assertEquals(200, meta.get(REF_DATA).get(RESPONSE_CODE));
+        assertResponseBodyNull(actualResponse);
+        assertMetaDetails(actualResponse, 200, 200);
     }
 
     @Test
     void shouldHandleExceptionGracefully() {
-        String userId = "12345";
-        UserDataGetRequestParams params = mock(UserDataGetRequestParams.class);
-        when(params.getUserId()).thenReturn(userId);
-        when(params.getEmail()).thenReturn(null);
-
-        when(idamTokenGenerator.generateIdamToken()).thenReturn(IDAM_TOKEN);
-        when(idamTokenGenerator.generateRefDataToken()).thenReturn(REF_DATA_TOKEN);
-        when(serviceTokenGenerator.generateServiceToken()).thenReturn(SERVICE_TOKEN);
-
         when(idamClient.getUserDataByUserId(IDAM_TOKEN, userId)).thenThrow(new RuntimeException("Service error"));
         when(refDataClient.getOrganisationDetailsByUserId(REF_DATA_TOKEN, SERVICE_TOKEN, userId))
             .thenThrow(new RuntimeException("Service error"));
 
         UserDataResponse actualResponse = userDataService.getUserData(params);
 
+        assertResponseBodyNull(actualResponse);
+        assertMetaDetails(actualResponse, 500, 500);
+    }
 
+    @Test
+    void shouldHandleFeignExceptionGracefully() {
+        Request request = Request.create(
+            Request.HttpMethod.GET,
+            "http://mockurl",
+            Map.of(),
+            null,
+            new RequestTemplate()
+        );
+        FeignException notFound = new FeignException.NotFound("User not found", request, null, null);
+        FeignException feignUnknown = new FeignException.FeignClientException(-1, "Unknown error", request, null, null);
+
+        when(idamClient.getUserDataByUserId(IDAM_TOKEN, userId)).thenThrow(notFound);
+        when(refDataClient.getOrganisationDetailsByUserId(REF_DATA_TOKEN, SERVICE_TOKEN, userId))
+            .thenThrow(feignUnknown);
+
+        UserDataResponse actualResponse = userDataService.getUserData(params);
+
+        assertResponseBodyNull(actualResponse);
+        assertMetaDetails(actualResponse, 404, 500);
+    }
+
+    @Test
+    void shouldNotCallRefDataIfIdamEmailResponds404() {
+        when(params.getUserId()).thenReturn(null);
+        when(params.getEmail()).thenReturn(email);
+
+        Request request = Request.create(
+            Request.HttpMethod.GET,
+            "http://mockurl",
+            Map.of(),
+            null,
+            new RequestTemplate()
+        );
+        FeignException notFound = new FeignException.NotFound("User not found", request, null, null);
+        when(idamClient.getUserDataByEmail(IDAM_TOKEN, email)).thenThrow(notFound);
+
+        UserDataResponse actualResponse = userDataService.getUserData(params);
+
+        assertResponseBodyNull(actualResponse);
+
+        assertMetaDetails(actualResponse, 404, 404);
+        verify(refDataClient, never()).getOrganisationDetailsByUserId(anyString(), anyString(), anyString());
+    }
+
+    @Test
+    void shouldNotCallRefDataIfIdamUserRespondsWithMissingUserId() {
+
+        when(params.getUserId()).thenReturn(null);
+        when(params.getEmail()).thenReturn(email);
+
+        IdamUserResponse idamUserResponse = new IdamUserResponse(
+            null,
+            email,
+            ACTIVE,
+            RECORD_TYPE,
+            null,
+            List.of(ROLE_1, ROLE_2)
+        );
+
+        when(idamClient.getUserDataByEmail(IDAM_TOKEN, email)).thenReturn(ResponseEntity.ok(idamUserResponse));
+
+        UserDataResponse actualResponse = userDataService.getUserData(params);
+
+        assertMetaDetails(actualResponse, 200, 404);
+        verify(refDataClient, never()).getOrganisationDetailsByUserId(anyString(), anyString(), anyString());
+    }
+
+    private void assertMetaDetails(UserDataResponse actualResponse, int idamResp, int refdataResp) {
+        Map<String, Map<String, Integer>> meta = actualResponse.meta();
+        assertNotNull(meta);
+        assertEquals(idamResp, meta.get(IDAM).get(RESPONSE_CODE_STR));
+        assertEquals(refdataResp, meta.get(REF_DATA).get(RESPONSE_CODE_STR));
+    }
+
+    private void assertResponseBodyNull(final UserDataResponse actualResponse) {
         assertNotNull(actualResponse);
         assertNull(actualResponse.userId());
         assertNull(actualResponse.email());
         assertNull(actualResponse.accountStatus());
         assertNull(actualResponse.roles());
         assertNull(actualResponse.organisationalAddress());
-
-        Map<String, Map<String, Integer>> meta = actualResponse.meta();
-        assertNotNull(meta);
-        assertEquals(500, meta.get(IDAM).get(RESPONSE_CODE));
-        assertEquals(500, meta.get(REF_DATA).get(RESPONSE_CODE));
-
     }
 
     private void assertUserDataResponseEquals(UserDataResponse expected, UserDataResponse actual) {
