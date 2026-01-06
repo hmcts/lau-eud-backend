@@ -160,7 +160,7 @@ def versions = [
   cucumber          : '7.33.0',
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
-  serenity          : '4.3.4'
+  serenity          : '5.0.2'
 ]
 
 ext {
