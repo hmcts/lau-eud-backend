@@ -70,7 +70,7 @@ idam:
     secret: ${S2S_SECRET_EUD_BACKEND:AAAAAAAAAAAAAAAA}
     microservice: ${S2S_MICROSERVICE:lau_eud_backend}
   api:
-    url: ${IDAM_API_URL:http://localhost:5000}
+    url: ${IDAM_CLIENT_API_URL:http://localhost:5000}
   client:
     id: ${IDAM_CLIENT_NAME:lau}
     secret: ${IDAM_CLIENT_SECRET:12345678}

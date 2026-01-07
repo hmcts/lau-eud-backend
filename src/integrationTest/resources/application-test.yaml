@@ -12,7 +12,7 @@ idam:
   s2s-auth:
     url: ${S2S_URL:http://localhost:4554}
   api:
-    url: ${IDAM_API_URL:http://localhost:4554}
+    url: ${IDAM_CLIENT_API_URL:http://localhost:4554}
 
 rd:
   professional:
