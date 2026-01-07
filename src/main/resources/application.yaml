@@ -80,7 +80,7 @@ idam:
 
 rd:
   professional:
-    url: ${RD_PROFESSIONAL_API_URL:http://localhost:4502}
+    url: ${RD_PROFESSIONAL_URL:http://localhost:4502}
 
 
 authorised.services: lau_frontend
