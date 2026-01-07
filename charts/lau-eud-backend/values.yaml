@@ -15,7 +15,7 @@ java:
     LAU_FLYWAY_MIGRATE_DB: "false" # this has to stay false as long as it is enabled in jenkins pipeline
     DB_ALLOW_DELETE_RECORD: "false"
     S2S_URL: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
-    IDAM_CLIENT_API_URL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
+    IDAM_API_URL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
     IDAM_CLIENT_NAME: lau
     IDAM_CLIENT_REDIRECT_URL: https://lau-eud-backend-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2/callback
     RD_PROFESSIONAL_API_URL: http://rd-professional-api.{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
