@@ -14,7 +14,7 @@ import static uk.gov.hmcts.reform.laubackend.eud.constants.CommonConstants.SERVI
 
 @FeignClient(
     name = "rd-professional-api",
-    url = "${rd.professional.url}",
+    url = "${rd.professional.api.url}",
     configuration = FeignClientProperties.FeignClientConfiguration.class
 )
 public interface RefDataClient {
