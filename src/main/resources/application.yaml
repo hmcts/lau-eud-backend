@@ -21,6 +21,11 @@ springdoc:
   writer-with-order-by-keys: true
 
 spring:
+  cloud:
+    azure:
+      servicebus:
+        namespace: ${LAU_EUD_SERVICEBUS_IDAM_NAMESPACE:}
+        entity-type: topic
   config:
     import: "optional:configtree:/mnt/secrets/lau/"
   application:
@@ -84,3 +89,16 @@ rd:
 
 
 authorised.services: lau_frontend
+
+lau:
+  servicebus:
+    enabled: ${LAU_EUD_SERVICEBUS_ENABLED:false}
+    subscription:
+      add: ${LAU_EUD_SERVICEBUS_ADD_SUBSCRIPTION:}
+      modify: ${LAU_EUD_SERVICEBUS_MODIFY_SUBSCRIPTION:}
+      remove: ${LAU_EUD_SERVICEBUS_REMOVE_SUBSCRIPTION:}
+    topic:
+      add: ${LAU_EUD_SERVICEBUS_ADD_TOPIC:idam-add-user}
+      modify: ${LAU_EUD_SERVICEBUS_MODIFY_TOPIC:idam-modify-user}
+      remove: ${LAU_EUD_SERVICEBUS_REMOVE_TOPIC:idam-remove-user}
+
