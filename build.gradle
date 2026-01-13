@@ -138,6 +138,9 @@ dependencyCheck {
 }
 
 dependencyManagement {
+  imports {
+    mavenBom "com.azure.spring:spring-cloud-azure-dependencies:6.1.0"
+  }
   dependencies {
     dependencySet(group: 'org.springframework.cloud', version: '4.3.1') {
       entry 'spring-cloud-starter-openfeign'
@@ -168,9 +171,9 @@ ext {
   logbackVersion = "1.5.24"
 }
 
-ext['snakeyaml.version'] = '2.0'
-
 dependencies {
+  implementation group: "com.azure.spring", name: "spring-cloud-azure-starter-servicebus"
+  implementation group: "com.azure.spring", name: "spring-messaging-azure-servicebus"
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
@@ -178,9 +181,8 @@ dependencies {
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
   implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.15'
   implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.1'
-
   implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
-
+  implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '7.0.0'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
   implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
@@ -190,8 +192,6 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-core', version: versions.flywaydb
   implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: versions.flywaydb
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.8'
-
-  implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
   implementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
 
   implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
@@ -207,6 +207,8 @@ dependencies {
   testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
   testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
   testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.13.2'
+  testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.3.0'
+
 
   integrationTestImplementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok

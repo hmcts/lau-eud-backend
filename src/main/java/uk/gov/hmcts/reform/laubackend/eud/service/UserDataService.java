@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.laubackend.eud.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +21,29 @@ import java.util.function.Supplier;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class UserDataService {
 
     private final IdamClient idamClient;
     private final IdamTokenGenerator idamTokenGenerator;
     private final ServiceTokenGenerator serviceTokenGenerator;
     private final RefDataClient refDataClient;
+
     @Qualifier("userDataExecutor")
-    private final Executor executor;
+    private final Executor userDataExecutor;
+
+    public UserDataService(
+        IdamClient idamClient,
+        IdamTokenGenerator idamTokenGenerator,
+        ServiceTokenGenerator serviceTokenGenerator,
+        RefDataClient refDataClient,
+        @Qualifier("userDataExecutor") Executor userDataExecutor
+    ) {
+        this.idamClient = idamClient;
+        this.idamTokenGenerator = idamTokenGenerator;
+        this.serviceTokenGenerator = serviceTokenGenerator;
+        this.refDataClient = refDataClient;
+        this.userDataExecutor = userDataExecutor;
+    }
 
     public static final String IDAM = "idam";
     public static final String REF_DATA = "refdata";
@@ -48,12 +61,16 @@ public class UserDataService {
 
         if (hasUserId) {
             final String userId = params.getUserId();
-            idamF    = callAsync(IDAM, () -> idamClient.getUserDataByUserId(idamToken, userId), executor);
+            idamF    = callAsync(IDAM, () -> idamClient.getUserDataByUserId(idamToken, userId), userDataExecutor);
             refDataF = callAsync(REF_DATA,() -> refDataClient.getOrganisationDetailsByUserId(
-                refDataToken, serviceToken, userId), executor);
+                refDataToken, serviceToken, userId), userDataExecutor);
 
         } else {
-            idamF = callAsync(IDAM,    () -> idamClient.getUserDataByEmail(idamToken, params.getEmail()), executor);
+            idamF = callAsync(
+                IDAM,
+                () -> idamClient.getUserDataByEmail(idamToken, params.getEmail()),
+                userDataExecutor
+            );
 
             refDataF = idamF.thenCompose(idam -> {
                 String userId = idam.body != null ? idam.body.userId() : null;
@@ -62,7 +79,7 @@ public class UserDataService {
                     String trimmed = userId.trim();
                     return callAsync(REF_DATA,
                         () -> refDataClient.getOrganisationDetailsByUserId(refDataToken, serviceToken, trimmed),
-                                     executor);
+                                     userDataExecutor);
                 }
                 return CompletableFuture.completedFuture(new CallResult<>(REF_DATA, 404, null));
             });
