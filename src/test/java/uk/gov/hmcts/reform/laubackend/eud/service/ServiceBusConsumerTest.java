@@ -2,6 +2,9 @@ package uk.gov.hmcts.reform.laubackend.eud.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
@@ -9,10 +12,16 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-@ExtendWith(OutputCaptureExtension.class)
+@ExtendWith({OutputCaptureExtension.class, MockitoExtension.class})
 class ServiceBusConsumerTest {
-    private final ServiceBusConsumer consumer = new ServiceBusConsumer();
+    @Mock
+    ServiceBusMessageHandler  serviceBusMessageHandler;
+
+    @InjectMocks
+    private ServiceBusConsumer consumer;
 
     @Test
     void onAddMessage_shouldLog(CapturedOutput output) {
@@ -23,11 +32,9 @@ class ServiceBusConsumerTest {
     }
 
     @Test
-    void onModifyMessage_shouldLog(CapturedOutput output) {
-        consumer.onModifyMessage("hello-modify");
-        await().atMost(Duration.ofSeconds(5))
-            .untilAsserted(() -> assertThat(output.getOut() + output.getErr())
-                .contains("Received Modify message from ServiceBusListener: hello-modify"));
+    void onModifyMessage_shouldLog() {
+        consumer.onModifyMessage(null);
+        verify(serviceBusMessageHandler, times(1)).handleMessage(null);
     }
 
     @Test

@@ -91,6 +91,8 @@ rd:
 authorised.services: lau_frontend
 
 lau:
+  idam:
+    ignore-changes-in-fields: lastModified,createDate,lastLoginDate
   servicebus:
     enabled: ${LAU_EUD_SERVICEBUS_ENABLED:false}
     subscription:
