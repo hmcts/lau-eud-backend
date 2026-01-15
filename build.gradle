@@ -163,7 +163,8 @@ def versions = [
   cucumber          : '7.33.0',
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
-  serenity          : '4.3.4'
+  serenity          : '4.3.4',
+  testcontainers    : '2.0.3',
 ]
 
 ext {
@@ -193,12 +194,15 @@ dependencies {
   implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: versions.flywaydb
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.9'
   implementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
+  implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
 
   implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+  testImplementation group: 'org.springframework.boot', name: 'spring-boot-testcontainers'
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.5.7'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.5.6'
   testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all'
 
   //Integration test
@@ -208,7 +212,9 @@ dependencies {
   testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
   testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.13.2'
   testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.3.0'
-
+  testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
+  testImplementation group: 'org.testcontainers', name: 'testcontainers-postgresql', version: versions.testcontainers
+  testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: '1.21.4'
 
   integrationTestImplementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok

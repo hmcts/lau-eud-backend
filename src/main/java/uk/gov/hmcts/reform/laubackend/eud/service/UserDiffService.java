@@ -17,7 +17,7 @@ import java.util.TreeSet;
 @RequiredArgsConstructor
 public class UserDiffService {
 
-    @Value("${lau.idam.ignore-changes-in-fields}")
+    @Value("${lau.servicebus.ignore-changes-in-fields}")
     private Set<String> ignoreChangesInFields;
 
     private final ObjectMapper objectMapper;
@@ -49,6 +49,9 @@ public class UserDiffService {
     }
 
     private String valueAsString(String fieldName, JsonNode node) {
+        if (node == null || node.isNull()) {
+            return null;
+        }
         if (node.isValueNode()) {
             return node.asText();
         }
