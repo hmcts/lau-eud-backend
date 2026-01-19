@@ -7,7 +7,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ServiceBusConsumerConditionalTest {
     private final ApplicationContextRunner contextRunner =
-        new ApplicationContextRunner().withUserConfiguration(ServiceBusConsumer.class);
+        new ApplicationContextRunner().withUserConfiguration(ServiceBusConsumer.class)
+            .withBean(ServiceBusMessageHandler.class, () -> null);
 
     @Test
     void shouldNotCreateConsumerBeanByDefault() {
