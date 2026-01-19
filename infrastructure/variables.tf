@@ -85,3 +85,21 @@ variable "lau-system-user-username" {
   type        = string
   default     = "lau-system.user@hmcts.net"
 }
+
+variable "lau_eud_db_password_rotation" {
+  description = "Change this value to force regeneration of lauuser db password"
+  type = string
+  default = "1"
+}
+
+variable "lau_eud_db_encryption_rotation" {
+  description = "Change this value to force regeneration of db encryption key. Note, this will require data migration"
+  type = string
+  default = "1"
+}
+
+variable "lau_system_user_password_rotation" {
+  description = "Change this value to force regeneration of lau_system_user password"
+  type = string
+  default = "1"
+}
