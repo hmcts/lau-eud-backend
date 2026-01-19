@@ -111,18 +111,31 @@ resource "azurerm_key_vault_secret" "lau_eud_db_user" {
 resource "azurerm_key_vault_secret" "lau_eud_db_password" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "eud-backend-app-db-password"
-  value        = random_password.password.result
+  value        = random_password.lau_eud_db_password.result
 }
 
 resource "azurerm_key_vault_secret" "eud_db_encryption_key" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "eud-backend-encryption-key"
-  value        = random_password.password.result
+  value        = random_password.lau_eud_db_encryption_key.result
 }
 
-resource "random_password" "password" {
+resource "random_password" "lau_eud_db_password" {
   length           = 32
   override_special = "()-_"
+
+  keepers = {
+    rotation = var.lau_eud_db_password_rotation
+  }
+}
+
+resource "random_password" "lau_eud_db_encryption_key" {
+  length           = 32
+  override_special = "()-_"
+
+  keepers = {
+    rotation = var.lau_eud_db_encryption_rotation
+  }
 }
 
 resource "azurerm_key_vault_secret" "LAU-SYSTEM-USER" {
@@ -134,8 +147,18 @@ resource "azurerm_key_vault_secret" "LAU-SYSTEM-USER" {
 resource "azurerm_key_vault_secret" "LAU-SYSTEM-PASSWORD" {
   key_vault_id = data.azurerm_key_vault.key_vault.id
   name         = "lau-system-user-password"
-  value        = random_password.password.result
+  value        = random_password.lau_system_user_password.result
 }
+
+resource "random_password" "lau_system_user_password" {
+  length           = 32
+  override_special = "()-_"
+
+  keepers = {
+    rotation = var.lau_system_user_password_rotation
+  }
+}
+
 
 ////////////////////////////////
 // S2S Key from RPE Vault
