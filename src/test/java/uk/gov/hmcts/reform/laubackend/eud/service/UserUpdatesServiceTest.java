@@ -69,7 +69,7 @@ class UserUpdatesServiceTest {
     void shouldUseJpaRepositoryAndMapToDtoWhenEncryptionDisabled() {
         ReflectionTestUtils.setField(service, "encryptionEnabled", false);
 
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("event_timestamp"));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("eventTimestamp"));
         // Use mocks for entities; mapping is performed by UserUpdate::from
         IdamUserChangeAudit a1 = mock(IdamUserChangeAudit.class);
         IdamUserChangeAudit a2 = mock(IdamUserChangeAudit.class);
@@ -91,7 +91,7 @@ class UserUpdatesServiceTest {
     void shouldTreatNullEncryptionEnabledAsDisabled() {
         ReflectionTestUtils.setField(service, "encryptionEnabled", null);
 
-        Pageable pageable = PageRequest.of(0, 5, Sort.by("event_timestamp"));
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("eventTimestamp"));
         Page<IdamUserChangeAudit> page = new PageImpl<>(List.of(mock(IdamUserChangeAudit.class)), pageable, 1);
 
         when(repository.findIdamUserChangeAuditsByUserId(USER_ID, pageable)).thenReturn(page);

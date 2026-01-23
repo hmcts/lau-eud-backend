@@ -33,7 +33,7 @@ public class UserUpdatesService {
                 PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
-                    Sort.by("event_timestamp").ascending())
+                    Sort.by("eventTimestamp").ascending())
             );
             return page.map(UserUpdate::from);
         }
