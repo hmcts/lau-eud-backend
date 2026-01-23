@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.laubackend.eud.domain.IdamUserChangeAudit;
 import uk.gov.hmcts.reform.laubackend.eud.dto.UserUpdate;
@@ -68,7 +69,7 @@ class UserUpdatesServiceTest {
     void shouldUseJpaRepositoryAndMapToDtoWhenEncryptionDisabled() {
         ReflectionTestUtils.setField(service, "encryptionEnabled", false);
 
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("event_timestamp"));
         // Use mocks for entities; mapping is performed by UserUpdate::from
         IdamUserChangeAudit a1 = mock(IdamUserChangeAudit.class);
         IdamUserChangeAudit a2 = mock(IdamUserChangeAudit.class);
@@ -90,7 +91,7 @@ class UserUpdatesServiceTest {
     void shouldTreatNullEncryptionEnabledAsDisabled() {
         ReflectionTestUtils.setField(service, "encryptionEnabled", null);
 
-        Pageable pageable = PageRequest.of(0, 5);
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("event_timestamp"));
         Page<IdamUserChangeAudit> page = new PageImpl<>(List.of(mock(IdamUserChangeAudit.class)), pageable, 1);
 
         when(repository.findIdamUserChangeAuditsByUserId(USER_ID, pageable)).thenReturn(page);

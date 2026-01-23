@@ -3,7 +3,9 @@ package uk.gov.hmcts.reform.laubackend.eud.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.eud.domain.IdamUserChangeAudit;
 import uk.gov.hmcts.reform.laubackend.eud.dto.UserUpdate;
@@ -26,7 +28,13 @@ public class UserUpdatesService {
         if (Boolean.TRUE.equals(encryptionEnabled)) {
             return customRepository.findIdamUserChangeAuditsByUserId(userId, pageable, encryptionKey);
         } else {
-            Page<IdamUserChangeAudit> page = repository.findIdamUserChangeAuditsByUserId(userId, pageable);
+            Page<IdamUserChangeAudit> page = repository.findIdamUserChangeAuditsByUserId(
+                userId,
+                PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by("event_timestamp").ascending())
+            );
             return page.map(UserUpdate::from);
         }
     }
