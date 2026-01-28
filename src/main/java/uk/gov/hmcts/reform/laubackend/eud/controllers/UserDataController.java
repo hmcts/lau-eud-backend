@@ -67,7 +67,10 @@ public class UserDataController {
             final UserDataResponse response = userDataService.getUserData(requestParams);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
-        }  catch (final Exception ex) {
+        } catch (FeignException.NotFound e) {
+            log.error("getUserData API call failed due to error - {}", e.getMessage(), e);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (final Exception ex) {
             log.error("getUserData API call failed due to error - {}", ex.getMessage(), ex);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
