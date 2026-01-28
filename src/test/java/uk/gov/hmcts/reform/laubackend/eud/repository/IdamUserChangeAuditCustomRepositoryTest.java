@@ -6,6 +6,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,6 +18,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import uk.gov.hmcts.reform.laubackend.eud.domain.EventType;
 import uk.gov.hmcts.reform.laubackend.eud.domain.IdamUserChangeAudit;
+import uk.gov.hmcts.reform.laubackend.eud.dto.UserUpdate;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -83,7 +87,11 @@ class IdamUserChangeAuditCustomRepositoryTest {
             .isNotNull()
             .doesNotContain("new@example.com");
 
-        // add repository call to fetch decrypted values once that is implemented
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<UserUpdate> page = repository.findIdamUserChangeAuditsByUserId("user-2", pageable, KEY);
+        assertThat(page.getTotalElements()).isEqualTo(1);
+        assertThat(page.getTotalPages()).isEqualTo(1);
+        assertThat(page.getContent().getFirst().value()).isEqualTo("1.2.3.4");
     }
 
     @Test
