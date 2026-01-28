@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.laubackend.eud.controllers;
 
-import feign.FeignException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -67,9 +66,6 @@ public class UserDataController {
             final UserDataResponse response = userDataService.getUserData(requestParams);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
-        } catch (FeignException.NotFound e) {
-            log.error("getUserData API call failed due to error - {}", e.getMessage(), e);
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (final Exception ex) {
             log.error("getUserData API call failed due to error - {}", ex.getMessage(), ex);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
