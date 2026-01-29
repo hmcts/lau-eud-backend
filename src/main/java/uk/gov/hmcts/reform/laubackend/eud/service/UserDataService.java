@@ -109,7 +109,7 @@ public class UserDataService {
                 return new CallResult<>(source, code, body);
             } catch (feign.FeignException fe) {
                 int status = fe.status() > 0 ? fe.status() : 500;
-                log.warn("[{}] FeignException status={} msg={}", source, status, fe.getMessage());
+                log.warn("[{}] FeignException status={} ", source, status);
                 return new CallResult<>(source, status, null);
             } catch (Exception e) {
                 log.warn("[{}] Exception caught: {}", source, e.getMessage(),e);
