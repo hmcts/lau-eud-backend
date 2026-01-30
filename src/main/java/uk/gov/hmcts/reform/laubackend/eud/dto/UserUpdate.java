@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.laubackend.eud.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import uk.gov.hmcts.reform.laubackend.eud.domain.EventType;
 import uk.gov.hmcts.reform.laubackend.eud.domain.IdamUserChangeAudit;
 
@@ -7,7 +8,7 @@ import java.time.OffsetDateTime;
 
 public record UserUpdate(
     String eventName,
-    EventType updateType,
+    @JsonProperty("eventType") EventType updateType,
     String value,
     OffsetDateTime timestamp,
     String principalId,
