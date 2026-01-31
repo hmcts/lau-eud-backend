@@ -1,12 +1,23 @@
-#As Not using database at the monet exclude jpa, jdbc and hibernate auto configuration
+#If you use a database then uncomment below lines and update db properties accordingly
 spring:
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-      - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+  application:
+    name: LAU Eud Backend
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:15://localhost/lau-eud
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
   flyway:
-    enabled: false
+    locations: classpath:db/migration
+    postgresql.transactional-lock: false
+    placeholders:
+      LAU_EUD_DB_PASSWORD: laupass
+
+flyway:
+  noop:
+    strategy: "false"
 
 idam:
   s2s-auth:
