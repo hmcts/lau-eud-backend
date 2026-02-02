@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FlywayHooks {
 
-    // Forces DB migrations to run once before any Cucumber scenarios touch the database.
+    // Forces DB migrations to run once before any Cucumber scenarios starts.
     private static final AtomicBoolean MIGRATED = new AtomicBoolean(false);
 
     @Autowired
