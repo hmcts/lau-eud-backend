@@ -1,0 +1,19 @@
+Feature: The application's GET User Updates endpoint
+
+  @userUpdates
+  Scenario: The backend is able to process User Updates with userId GET requests
+    Given LAU EUD backend application is healthy
+    When And I GET "/audit/userUpdates" using query param userId "13e31622-edea-493c-8240-9b780c9d6111" with page "0" and size "10"
+    Then a userUpdates response body is returned for userId "13e31622-edea-493c-8240-9b780c9d6111"
+
+  @userUpdates
+  Scenario: The backend is unable to process User Updates GET requests due to missing s2s
+    Given LAU EUD backend application is healthy
+    When And I GET "/audit/userUpdates" without service authorization header
+    Then HTTP "400" Bad Request response is returned
+
+  @userUpdates
+  Scenario: The backend is unable to process User Updates GET requests due to missing mandatory params
+    Given LAU EUD backend application is healthy
+    When I request GET "/audit/userUpdates" endpoint without mandatory params
+    Then HTTP "400" Bad Request response is returned

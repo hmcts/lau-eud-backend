@@ -5,6 +5,8 @@ spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:postgresql:15://localhost/lau-eud
+    username: test
+    password: test
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -12,12 +14,22 @@ spring:
   flyway:
     locations: classpath:db/migration
     postgresql.transactional-lock: false
+    enabled: true
+    user: test
+    password: test
+    baseline-on-migrate: true
+    # Flyway config mirrors the test container DB; hook ensures migrations run before Cucumber scenarios.
     placeholders:
       LAU_EUD_DB_PASSWORD: laupass
 
 flyway:
   noop:
     strategy: "false"
+
+lau:
+  db:
+    encryption-enabled: false
+    encryption-key: ThisIsATestKeyForEncryption
 
 idam:
   s2s-auth:

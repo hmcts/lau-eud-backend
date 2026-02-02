@@ -160,7 +160,8 @@ repositories {
 def versions = [
   flywaydb          : '11.20.3',
   lombok            : '1.18.42',
-  cucumber          : '7.34.1',
+  // Keep these aligned (Cucumber ↔ JUnit ↔ JUnit Platform) to avoid classpath conflicts.
+  cucumber          : '7.14.0',
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
   serenity          : '4.3.4',
@@ -201,15 +202,11 @@ dependencies {
 
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
   testImplementation group: 'org.springframework.boot', name: 'spring-boot-testcontainers'
-  testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.5.7'
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.5.6'
   testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all'
 
   //Integration test
-  testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
-  testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: versions.cucumber
-  testImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
   testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
   testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.13.2'
   testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.3.0'
@@ -219,6 +216,14 @@ dependencies {
 
   integrationTestImplementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
   integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+
+  integrationTestImplementation group: 'io.cucumber', name: 'cucumber-java', version: versions.cucumber
+  integrationTestImplementation group: 'io.cucumber', name: 'cucumber-spring', version: versions.cucumber
+  integrationTestImplementation group: 'io.cucumber', name: 'cucumber-junit-platform-engine', version: versions.cucumber
+  integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: versions.junitPlatform
+  integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+  integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
+  integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-launcher', version: versions.junitPlatform
 
 
   //Functional test
