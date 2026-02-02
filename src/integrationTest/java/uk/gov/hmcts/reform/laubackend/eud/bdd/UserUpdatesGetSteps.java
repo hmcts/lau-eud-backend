@@ -57,7 +57,7 @@ public class UserUpdatesGetSteps extends AbstractSteps {
         assertThat(content.size()).isEqualTo(1);
 
         assertThat(json.getString("content[0].eventName")).isEqualTo("account-status");
-        assertThat(json.getString("content[0].updateType")).isEqualTo("ADD");
+        assertThat(json.getString("content[0].eventType")).isEqualTo("ADD");
         assertThat(json.getString("content[0].value")).isEqualTo("ACTIVE");
         assertThat(json.getString("content[0].previousValue")).isEqualTo("PENDING");
         assertThat(json.getString("content[0].principalId")).isEqualTo(PRINCIPAL_ID);
