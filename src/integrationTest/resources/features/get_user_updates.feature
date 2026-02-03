@@ -10,6 +10,7 @@ Feature: The application's GET User Updates endpoint
     And userUpdates contains change "email" with value "new.email@example.org" and previous "old.email@example.org"
     And userUpdates contains change "forename" with value "Jane" and previous "John"
     And userUpdates contains change "surname" with value "Doe" and previous "Smith"
+    And userUpdates contains change "displayName" with value "Jane Doe" and previous "John Smith"
     And userUpdates contains change "roleNames" with value "caseworker,citizen" and previous "citizen"
     And userUpdates contains change "accountStatus" with value "SUSPENDED" and previous "ACTIVE"
     And userUpdates contains change "recordType" with value "ARCHIVED" and previous "LIVE"
