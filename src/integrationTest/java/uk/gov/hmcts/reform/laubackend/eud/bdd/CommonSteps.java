@@ -14,6 +14,7 @@ import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static uk.gov.hmcts.reform.laubackend.eud.helper.RestConstants.BAD_S2S_TOKEN;
 import static uk.gov.hmcts.reform.laubackend.eud.bdd.WireMockInstantiator.getWireMockInstance;
 
 public class CommonSteps {
@@ -43,7 +44,7 @@ public class CommonSteps {
         assertThat(response.getBody().asString()).contains("Welcome");
     }
 
-    @When("And I GET {string} without service authorization header")
+    @When("I GET {string} without service authorization header")
     public void searchCaseActionWithoutAuthHeader(final String path) {
         final Response response = restHelper.getResponseWithoutHeader(getUrl(path));
         httpStatusResponseCode = response.getStatusCode();
@@ -53,6 +54,14 @@ public class CommonSteps {
     public void requestWithoutMandatoryParams(final String path) {
         getWireMockInstance().resetRequests();
         final Response response = restHelper.getResponse(getUrl(path), Map.of("nonExistingParam", "nonExistingValue"));
+        httpStatusResponseCode = response.getStatusCode();
+    }
+
+    @When("I GET {string} using query param userId {string} with invalid service authorization header")
+    public void requestWithInvalidServiceHeader(final String path, final String userId) {
+        final Response response = restHelper.getResponseWithServiceToken(getUrl(path),
+                                                                        Map.of("userId", userId),
+                                                                        BAD_S2S_TOKEN);
         httpStatusResponseCode = response.getStatusCode();
     }
 
