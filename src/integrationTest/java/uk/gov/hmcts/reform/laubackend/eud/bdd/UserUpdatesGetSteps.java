@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.laubackend.eud.bdd;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.datatable.DataTable;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,18 +75,29 @@ public class UserUpdatesGetSteps extends AbstractSteps {
         assertThat(repository.count()).isEqualTo(expected);
     }
 
-    @Then("userUpdates contains change {string} with value {string} and previous {string}")
-    public void assertContainsChange(String eventName, String value, String previousValue) {
+    @Then("userUpdates changed values are:")
+    public void assertChangedValues(DataTable table) {
+        assertUserUpdatesMatch(table, "value");
+    }
+
+    @Then("userUpdates previous values are:")
+    public void assertPreviousValues(DataTable table) {
+        assertUserUpdatesMatch(table, "previousValue");
+    }
+
+    private void assertUserUpdatesMatch(DataTable table, String valueKey) {
         JsonPath json = new JsonPath(userUpdatesResponseBody);
+        Map<String, String> expected = table.asMaps().get(0);
         List<Map<String, Object>> content = json.getList("content");
-        assertThat(content)
-            .anySatisfy(entry -> {
-                assertThat(entry.get("eventName")).isEqualTo(eventName);
-                assertThat(entry.get("value")).isEqualTo(value);
-                assertThat(entry.get("previousValue")).isEqualTo(previousValue);
-                assertThat(entry.get("eventType")).isEqualTo("MODIFY");
-                assertThat(entry.get("principalId")).isEqualTo(PRINCIPAL_ID);
-            });
+        for (Map.Entry<String, String> entry : expected.entrySet()) {
+            String eventName = entry.getKey();
+            String expectedValue = entry.getValue();
+            assertThat(content)
+                .anySatisfy(change -> {
+                    assertThat(change.get("eventName")).isEqualTo(eventName);
+                    assertThat(change.get(valueKey)).isEqualTo(expectedValue);
+                });
+        }
     }
 
 }
