@@ -75,27 +75,20 @@ public class UserUpdatesGetSteps extends AbstractSteps {
         assertThat(repository.count()).isEqualTo(expected);
     }
 
-    @Then("userUpdates changed values are:")
-    public void assertChangedValues(DataTable table) {
-        assertUserUpdatesMatch(table, "value");
-    }
-
-    @Then("userUpdates previous values are:")
-    public void assertPreviousValues(DataTable table) {
-        assertUserUpdatesMatch(table, "previousValue");
-    }
-
-    private void assertUserUpdatesMatch(DataTable table, String valueKey) {
+    @Then("userUpdates contains changes:")
+    public void assertContainsChanges(DataTable table) {
         JsonPath json = new JsonPath(userUpdatesResponseBody);
-        Map<String, String> expected = table.asMaps().get(0);
         List<Map<String, Object>> content = json.getList("content");
-        for (Map.Entry<String, String> entry : expected.entrySet()) {
-            String eventName = entry.getKey();
-            String expectedValue = entry.getValue();
+        List<Map<String, String>> rows = table.asMaps();
+        for (Map<String, String> row : rows) {
+            String fieldName = row.get("fieldName");
+            String value = row.get("value");
+            String previousValue = row.get("previousValue");
             assertThat(content)
                 .anySatisfy(change -> {
-                    assertThat(change.get("eventName")).isEqualTo(eventName);
-                    assertThat(change.get(valueKey)).isEqualTo(expectedValue);
+                    assertThat(change.get("eventName")).isEqualTo(fieldName);
+                    assertThat(change.get("value")).isEqualTo(value);
+                    assertThat(change.get("previousValue")).isEqualTo(previousValue);
                 });
         }
     }

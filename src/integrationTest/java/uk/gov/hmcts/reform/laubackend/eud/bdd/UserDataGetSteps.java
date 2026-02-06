@@ -24,7 +24,7 @@ public class UserDataGetSteps extends AbstractSteps {
     }
 
 
-    @When("And I GET {string} using query param either userId {string} or email {string}")
+    @When("I GET {string} using query param either userId {string} or email {string}")
     public void searchUser(final String path, String userId, String email) {
         final Response response = restHelper.getResponse(baseUrl() + path,
                                                          Map.of("userId", userId, "email", email));

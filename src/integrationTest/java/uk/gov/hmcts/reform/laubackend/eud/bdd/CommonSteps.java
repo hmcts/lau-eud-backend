@@ -44,7 +44,7 @@ public class CommonSteps {
         assertThat(response.getBody().asString()).contains("Welcome");
     }
 
-    @When("And I GET {string} without service authorization header")
+    @When("I GET {string} without service authorization header")
     public void searchCaseActionWithoutAuthHeader(final String path) {
         final Response response = restHelper.getResponseWithoutHeader(getUrl(path));
         httpStatusResponseCode = response.getStatusCode();
@@ -57,7 +57,7 @@ public class CommonSteps {
         httpStatusResponseCode = response.getStatusCode();
     }
 
-    @When("And I GET {string} using query param userId {string} with invalid service authorization header")
+    @When("I GET {string} using query param userId {string} with invalid service authorization header")
     public void requestWithInvalidServiceHeader(final String path, final String userId) {
         final Response response = restHelper.getResponseWithServiceToken(getUrl(path),
                                                                         Map.of("userId", userId),
