@@ -4,20 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.Title;
-import net.serenitybdd.junit.runners.SerenityRunner;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserDataResponse;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.steps.UserDataGetApiSteps;
-import uk.gov.hmcts.reform.laubackend.eud.functionaltests.utils.TestConstants;
 
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-@RunWith(SerenityRunner.class)
+@ExtendWith(SerenityJUnit5Extension.class)
 public class UserDataApiTest {
 
     @Steps
@@ -43,9 +42,7 @@ public class UserDataApiTest {
         );
 
         userDataGetApiSteps.thenTheGetUserDataResponseParamsMatchesTheInput(queryParamMap, actualResponse);
-        String successOrFailure = userDataGetApiSteps.thenASuccessResposeIsReturned(responseEntity);
-        Assert.assertEquals("The assertion for GET UserData API response code 200 is not successful",
-                            TestConstants.SUCCESS,successOrFailure);
+        userDataGetApiSteps.thenASuccessResposeIsReturned(responseEntity);
         userDataGetApiSteps.deleteTheUser();
     }
 
@@ -61,11 +58,7 @@ public class UserDataApiTest {
             invalidServiceToken,
             queryParamMap
         );
-        String successOrFailure = userDataGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
-        Assert.assertEquals("Get UserData API response code 403 assertion is not successful",
-                            TestConstants.SUCCESS,successOrFailure
-
-        );
+        userDataGetApiSteps.thenBadResponseIsReturned(response, FORBIDDEN.value());
         userDataGetApiSteps.deleteTheUser();
     }
 
@@ -79,9 +72,7 @@ public class UserDataApiTest {
             authServiceToken,
             queryParamMap
         );
-        String successOrFailure = userDataGetApiSteps.thenBadResponseIsReturned(response, 400);
-        Assert.assertEquals("Get UserData API response code 400 assertion is not successful",
-                            TestConstants.SUCCESS,successOrFailure);
+        userDataGetApiSteps.thenBadResponseIsReturned(response, 400);
     }
 
     @Test
@@ -97,8 +88,8 @@ public class UserDataApiTest {
         );
         UserDataResponse userDataResponse = responseEntity.getBody();
         Integer status = userDataResponse.meta().get("idam").get("responseCode");
-        Assert.assertEquals("The assertion for GET UserData API using userId response code 404 is not successful",
-                            404,status.intValue());
+        assertEquals(404, status.intValue(),
+                     "The assertion for GET UserData API using userId response code 404 is not successful");
     }
 
     @Test
@@ -114,8 +105,8 @@ public class UserDataApiTest {
         );
         UserDataResponse userDataResponse = responseEntity.getBody();
         Integer status = userDataResponse.meta().get("idam").get("responseCode");
-        Assert.assertEquals("The assertion for GET UserData API using email response code 404 is not successful",
-                            404,status.intValue());
+        assertEquals(404, status.intValue(),
+                     "The assertion for GET UserData API using email response code 404 is not successful");
     }
 
     @Test
@@ -128,8 +119,8 @@ public class UserDataApiTest {
                 authServiceToken,
                 queryParamMap
         );
-        Assert.assertEquals("The assertion for GET UserData API using more than 64 chars userId is not successful",
-                400,response.getStatusCode());
+        assertEquals(400, response.getStatusCode(),
+                     "The assertion for GET UserData API using more than 64 chars userId is not successful");
     }
 
     @Test
@@ -142,7 +133,7 @@ public class UserDataApiTest {
                 authServiceToken,
                 queryParamMap
         );
-        Assert.assertEquals("The assertion for GET UserData API manadtory params mssing is not successful",
-                400,response.getStatusCode());
+        assertEquals(400, response.getStatusCode(),
+                     "The assertion for GET UserData API manadtory params mssing is not successful");
     }
 }

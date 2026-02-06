@@ -13,7 +13,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @AllArgsConstructor
 @Schema(description = "Data model for the User Data request")
 public class UserDataGetRequestParams {
-    @Size(max = 64, message = "UserId must not exceed 64 characters")
+    @Size(
+        max = 64,
+        message = "UserId must not exceed 64 characters",
+        groups = {UserDataValidation.UserIdRequired.class,UserDataValidation.EitherUserIdOrEmailRequired.class}
+    )
     @NotBlank(message = "userId is mandatory", groups = UserDataValidation.UserIdRequired.class)
     private String userId;
 
