@@ -41,7 +41,7 @@ public class UserUpdatesGetSteps extends AbstractSteps {
         );
     }
 
-    @When("And I GET {string} using query param userId {string} with page {string} and size {string}")
+    @When("I GET {string} using query param userId {string} with page {string} and size {string}")
     public void searchUserUpdates(final String path, String userId, String page, String size) {
         final Response response = restHelper.getResponse(baseUrl() + path,
                                                          Map.of("userId", userId, "page", page, "size", size));
