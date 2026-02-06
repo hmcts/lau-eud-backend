@@ -3,8 +3,8 @@ Feature: The application's GET User Updates endpoint
   @userUpdates
   Scenario: The backend is able to process User Updates with userId GET requests
     Given LAU EUD backend application is healthy
-    When And I GET "/audit/userUpdates" using query param userId "13e31622-edea-493c-8240-9b780c9d6111" with page "0" and size "10"
-    Then a userUpdates response body is returned for userId "13e31622-edea-493c-8240-9b780c9d6111"
+    And I GET "/audit/userUpdates" using query param userId "13e31622-edea-493c-8240-9b780c9d6111" with page "0" and size "10"
+    And a userUpdates response body is returned for userId "13e31622-edea-493c-8240-9b780c9d6111"
     And userUpdates totalElements is 7
     And database has 7 user update records
     And userUpdates contains change "email" with value "new.email@example.org" and previous "old.email@example.org"
