@@ -36,4 +36,19 @@ public class RestHelper {
             .get()
             .andReturn();
     }
+
+    public Response getResponseWithServiceToken(final String path,
+                                                final Map<String, String> queryParams,
+                                                final String token) {
+        return RestAssured
+            .given()
+            .relaxedHTTPSValidation()
+            .baseUri(path)
+            .queryParams(queryParams)
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .header(SERVICE_AUTHORISATION_HEADER, "Bearer " + token)
+            .when()
+            .get()
+            .andReturn();
+    }
 }
