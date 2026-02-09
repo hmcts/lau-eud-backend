@@ -100,7 +100,7 @@ public class UserUpdatesGetApiSteps extends BaseSteps {
     public void thenASuccessResponseIsReturned(ResponseEntity<UserUpdatesResponse> responseEntity) {
         Assertions.assertTrue(
             responseEntity.getStatusCode().value() == 200 || responseEntity.getStatusCode().value() == 201,
-            "Response status code is not 200, but it is " + responseEntity.getStatusCode().value()
+            "Response status code is not 200 or 201, but it is " + responseEntity.getStatusCode().value()
         );
     }
 
