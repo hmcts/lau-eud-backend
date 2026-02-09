@@ -48,7 +48,6 @@ public class BaseSteps {
         }
 
         REQSPEC = specBuilder.build();
-        System.out.println("Functional tests using TEST_URL: " + EnvConfig.API_URL);
     }
 
     public RequestSpecification rest() {
