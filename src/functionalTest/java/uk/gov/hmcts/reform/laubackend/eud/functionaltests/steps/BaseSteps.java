@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserDataResponse;
+import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserUpdatesResponse;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.helper.AuthorizationHeaderHelper;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.config.EnvConfig;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.helper.DatabaseHelper;
@@ -53,34 +54,24 @@ public class BaseSteps {
         return SerenityRest.given(REQSPEC);
     }
 
-    public ResponseEntity<UserDataResponse> performGetOperation(String endpoint,
+    public ResponseEntity<UserDataResponse> performGetUserDataOperation(String endpoint,
                                                                 Map<String, String> headers,
                                                                 Map<String, String> queryParams,
                                                  String authServiceToken) {
 
-        RequestSpecification requestSpecification = rest().urlEncodingEnabled(false)
-            .given()
-            .header("ServiceAuthorization", authServiceToken)
-            .header("Content-Type", "application/json");
-
-
-        if (null != headers && !headers.isEmpty()) {
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                requestSpecification.header(createHeader(entry.getKey(), entry.getValue()));
-            }
-        }
-
-        if (null != queryParams && !queryParams.isEmpty()) {
-            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-                requestSpecification.queryParam(entry.getKey(), entry.getValue());
-            }
-        }
-
-        Response response = requestSpecification.get(endpoint)
-            .then()
-            .extract().response();
+        Response response = performGetOperation(endpoint, headers, queryParams, authServiceToken);
         UserDataResponse userDataResponse = response.as(UserDataResponse.class);
         return new ResponseEntity<>(userDataResponse, HttpStatus.valueOf(response.getStatusCode()));
+    }
+
+    public ResponseEntity<UserUpdatesResponse> performGetUserUpdatesOperation(String endpoint,
+                                                                              Map<String, String> headers,
+                                                                              Map<String, String> queryParams,
+                                                                              String authServiceToken) {
+
+        Response response = performGetOperation(endpoint, headers, queryParams, authServiceToken);
+        UserUpdatesResponse userUpdatesResponse = response.as(UserUpdatesResponse.class);
+        return new ResponseEntity<>(userUpdatesResponse, HttpStatus.valueOf(response.getStatusCode()));
     }
 
     public Response performGetOperationWithInvalidParams(String endpoint,
@@ -88,27 +79,7 @@ public class BaseSteps {
                                                                               Map<String, String> queryParams,
                                                                               String authServiceToken) {
 
-        RequestSpecification requestSpecification = rest().urlEncodingEnabled(false)
-            .given()
-            .header("ServiceAuthorization", authServiceToken)
-            .header("Content-Type", "application/json");
-
-
-        if (null != headers && !headers.isEmpty()) {
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                requestSpecification.header(createHeader(entry.getKey(), entry.getValue()));
-            }
-        }
-
-        if (null != queryParams && !queryParams.isEmpty()) {
-            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
-                requestSpecification.queryParam(entry.getKey(), entry.getValue());
-            }
-        }
-
-        return requestSpecification.get(endpoint)
-            .then()
-            .extract().response();
+        return performGetOperation(endpoint, headers, queryParams, authServiceToken);
     }
 
     public Header createHeader(String headerKey, String headerValue) {
@@ -159,5 +130,32 @@ public class BaseSteps {
     protected int deleteUser() {
         ExtractableResponse<Response> res =  databaseHelper.deleteUser();
         return res.statusCode();
+    }
+
+    protected Response performGetOperation(String endpoint,
+                                                         Map<String, String> headers,
+                                                         Map<String, String> queryParams,
+                                                         String authServiceToken) {
+        RequestSpecification requestSpecification = rest().urlEncodingEnabled(false)
+            .given()
+            .header("ServiceAuthorization", authServiceToken)
+            .header("Content-Type", "application/json");
+
+
+        if (null != headers && !headers.isEmpty()) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                requestSpecification.header(createHeader(entry.getKey(), entry.getValue()));
+            }
+        }
+
+        if (null != queryParams && !queryParams.isEmpty()) {
+            for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+                requestSpecification.queryParam(entry.getKey(), entry.getValue());
+            }
+        }
+
+        return requestSpecification.get(endpoint)
+            .then()
+            .extract().response();
     }
 }

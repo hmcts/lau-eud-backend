@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.laubackend.eud.functionaltests.steps;
 
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Step;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class UserDataGetApiSteps extends BaseSteps {
     @Step("When the UserData GET service is invoked with the valid params")
     public ResponseEntity<UserDataResponse> whenTheGetUserDataIsInvokedWithTheGivenParams(String serviceToken,
              Map<String, String> queryParamMap) {
-        return performGetOperation(USER_DATA_ENDPOINT,
+        return performGetUserDataOperation(USER_DATA_ENDPOINT,
                                    null, queryParamMap, serviceToken);
     }
 
@@ -50,15 +50,17 @@ public class UserDataGetApiSteps extends BaseSteps {
 
             if ("userId".equals(queryParam) && !isEmpty(inputQueryParamMap.get(queryParam))) {
                 String userId = actualResponse.userId();
-                Assert.assertEquals(
-                    "User Id is missing in the response",
-                    inputQueryParamMap.get(queryParam), userId
+                Assertions.assertEquals(
+                    inputQueryParamMap.get(queryParam),
+                    userId,
+                    "User Id is missing in the response"
                 );
             } else if ("email".equals(queryParam) && !isEmpty(inputQueryParamMap.get(queryParam))) {
                 String email = actualResponse.email();
-                Assert.assertEquals(
-                    "email is missing in the response",
-                    inputQueryParamMap.get(queryParam), email
+                Assertions.assertEquals(
+                    inputQueryParamMap.get(queryParam),
+                    email,
+                    "email is missing in the response"
                 );
 
             }
@@ -81,33 +83,32 @@ public class UserDataGetApiSteps extends BaseSteps {
     }
 
     @Step("Then bad response is returned")
-    public String thenBadResponseIsReturned(Response response, int expectedStatusCode) {
-        Assert.assertEquals(
-            "Response status code is not " + expectedStatusCode + ", but it is " + response.getStatusCode(),
-            expectedStatusCode,response.getStatusCode()
+    public void thenBadResponseIsReturned(Response response, int expectedStatusCode) {
+        Assertions.assertEquals(
+            expectedStatusCode,
+            response.getStatusCode(),
+            "Response status code is not " + expectedStatusCode + ", but it is " + response.getStatusCode()
         );
-        return SUCCESS;
     }
 
     @Step("Then a success response is returned")
-    public String thenASuccessResposeIsReturned(ResponseEntity<UserDataResponse> responseEntity) {
-        Assert.assertTrue(
-            "Response status code is not 200, but it is " + responseEntity.getStatusCode().value(),
-            responseEntity.getStatusCode().value() == 200 || responseEntity.getStatusCode().value() == 201
+    public void thenASuccessResposeIsReturned(ResponseEntity<UserDataResponse> responseEntity) {
+        Assertions.assertTrue(
+            responseEntity.getStatusCode().value() == 200 || responseEntity.getStatusCode().value() == 201,
+            "Response status code is not 200 or 201, but it is " + responseEntity.getStatusCode().value()
         );
-        return SUCCESS;
     }
 
     @Step("Create a user to pass as param")
     public String createUserToPassAsParam() {
         String userId = createUser();
-        Assert.assertNotNull("User Id is null",userId);
+        Assertions.assertNotNull(userId, "User Id is null");
         return userId;
     }
 
     @Step("Delete the user after test")
     public void deleteTheUser() {
         int statusCode =  deleteUser();
-        Assert.assertEquals(204,statusCode);
+        Assertions.assertEquals(204, statusCode);
     }
 }
