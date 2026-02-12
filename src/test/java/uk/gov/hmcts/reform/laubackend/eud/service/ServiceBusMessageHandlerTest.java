@@ -43,7 +43,10 @@ class ServiceBusMessageHandlerTest {
     private ServiceBusMessageHandler handler;
 
     @Captor
-    private ArgumentCaptor<List<IdamUserChangeAudit>> auditsCaptor;
+    private ArgumentCaptor<List<IdamUserChangeAudit>> auditListCaptor;
+
+    @Captor
+    private ArgumentCaptor<IdamUserChangeAudit> auditCaptor;
 
     @Test
     void shouldSkipModifyWhenPreviousUserIsNull() {
@@ -86,8 +89,8 @@ class ServiceBusMessageHandlerTest {
 
         handler.handleMessage(event);
 
-        verify(repository).saveAll(auditsCaptor.capture());
-        List<IdamUserChangeAudit> saved = auditsCaptor.getValue();
+        verify(repository).saveAll(auditListCaptor.capture());
+        List<IdamUserChangeAudit> saved = auditListCaptor.getValue();
 
         assertThat(saved).hasSize(2);
 
@@ -128,8 +131,8 @@ class ServiceBusMessageHandlerTest {
 
         handler.handleMessage(event);
 
-        verify(customRepository).saveAllEncrypted(auditsCaptor.capture(), ArgumentMatchers.eq("dummy"));
-        List<IdamUserChangeAudit> saved = auditsCaptor.getValue();
+        verify(customRepository).saveAllEncrypted(auditListCaptor.capture(), ArgumentMatchers.eq("dummy"));
+        List<IdamUserChangeAudit> saved = auditListCaptor.getValue();
 
         assertThat(saved).hasSize(1);
 
@@ -138,6 +141,55 @@ class ServiceBusMessageHandlerTest {
         assertThat(first.getEventValue()).isEqualTo("SUSPENDED");
         assertThat(first.getPreviousEventValue()).isEqualTo("ACTIVE");
     }
+
+    @Test
+    void shouldSaveAuditRowForAddUserEvent() {
+        ReflectionTestUtils.setField(handler, "encryptionEnabled", false);
+        User currentUser = new UserTestData().build();
+        LocalDateTime eventTime = LocalDateTime.now(ZoneOffset.UTC);
+        IdamEvent event = newIdamEvent(
+            EventType.ADD,
+            null,
+            currentUser,
+            null,
+            eventTime
+        );
+
+        handler.handleAddMessage(event);
+        verify(repository).save(auditCaptor.capture());
+        IdamUserChangeAudit saved = auditCaptor.getValue();
+        assertThat(saved.getEventType()).isEqualTo(EventType.ADD);
+        assertThat(saved.getPrincipalUserId()).isNull();
+        assertThat(saved.getUserId()).isEqualTo(currentUser.id());
+        assertThat(saved.getEventValue()).isEqualTo("User Created");
+        assertThat(saved.getEventName()).isEqualTo("Create user");
+    }
+
+    @Test
+    void shouldSaveEncryptedAuditRowForAddUserEvent() {
+        ReflectionTestUtils.setField(handler, "encryptionEnabled", true);
+        ReflectionTestUtils.setField(handler, "encryptionKey", "dummy");
+        User currentUser = new UserTestData().build();
+        LocalDateTime eventTime = LocalDateTime.now(ZoneOffset.UTC);
+        IdamEvent event = newIdamEvent(
+            EventType.ADD,
+            null,
+            currentUser,
+            "principal-456",
+            eventTime
+        );
+
+        handler.handleAddMessage(event);
+
+        verify(customRepository).saveEncrypted(auditCaptor.capture(), ArgumentMatchers.eq("dummy"));
+        IdamUserChangeAudit saved = auditCaptor.getValue();
+        assertThat(saved.getEventType()).isEqualTo(EventType.ADD);
+        assertThat(saved.getPrincipalUserId()).isEqualTo("principal-456");
+        assertThat(saved.getUserId()).isEqualTo(currentUser.id());
+        assertThat(saved.getEventValue()).isEqualTo("User Created");
+        assertThat(saved.getEventName()).isEqualTo("Create user");
+    }
+
 
     private static IdamEvent newIdamEvent(
         EventType eventType,
