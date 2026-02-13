@@ -139,7 +139,7 @@ dependencyCheck {
 
 dependencyManagement {
   imports {
-    mavenBom "com.azure.spring:spring-cloud-azure-dependencies:6.1.0"
+    mavenBom "com.azure.spring:spring-cloud-azure-dependencies:7.0.0"
   }
   dependencies {
     dependencySet(group: 'org.springframework.cloud', version: '4.3.1') {
