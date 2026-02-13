@@ -24,15 +24,13 @@ class ServiceBusConsumerTest {
     private ServiceBusConsumer consumer;
 
     @Test
-    void onAddMessage_shouldLog(CapturedOutput output) {
-        consumer.onAddMessage("hello-add");
-        await().atMost(Duration.ofSeconds(5))
-            .untilAsserted(() -> assertThat(output.getOut() + output.getErr())
-                .contains("Received Add message from ServiceBusListener: hello-add"));
+    void onAddMessage_shouldCallAddHandler() {
+        consumer.onAddMessage(null);
+        verify(serviceBusMessageHandler, times(1)).handleAddMessage(null);
     }
 
     @Test
-    void onModifyMessage_shouldLog() {
+    void onModifyMessage_shouldCallModifyHandler() {
         consumer.onModifyMessage(null);
         verify(serviceBusMessageHandler, times(1)).handleMessage(null);
     }
