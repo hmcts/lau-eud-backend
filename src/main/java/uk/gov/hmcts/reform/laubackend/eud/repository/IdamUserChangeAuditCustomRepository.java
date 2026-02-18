@@ -20,6 +20,15 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class IdamUserChangeAuditCustomRepository {
+    private static final String USER_ID = "userId";
+    private static final String PRINCIPAL_ID = "principalUserId";
+    private static final String EVENT_TYPE = "eventType";
+    private static final String EVENT_NAME = "eventName";
+    private static final String EVENT_VALUE = "eventValue";
+    private static final String PREVIOUS_EVENT_VALUE = "previousEventValue";
+    private static final String EVENT_TIMESTAMP = "eventTimestamp";
+    private static final String ENCRYPTION_KEY = "encryptionKey";
+
     private static final String INSERT_SQL = """
         INSERT INTO public.idam_user_change_audit
             (user_id, principal_user_id, event_type, event_name,
@@ -36,10 +45,10 @@ public class IdamUserChangeAuditCustomRepository {
         """;
 
     private static final String COUNT_SQL = """
-            SELECT count(*)
-            FROM idam_user_change_audit
-            WHERE user_id = :userId
-            """;
+        SELECT count(*)
+        FROM idam_user_change_audit
+        WHERE user_id = :userId
+        """;
 
     private static final String SELECT_SQL = """
         SELECT
@@ -67,29 +76,37 @@ public class IdamUserChangeAuditCustomRepository {
         }
 
         SqlParameterSource[] batch = entities.stream()
-            .map(e -> new MapSqlParameterSource()
-                .addValue("userId", e.getUserId())
-                .addValue("principalUserId", e.getPrincipalUserId())
-                .addValue("eventType", e.getEventType().name())
-                .addValue("eventName", e.getEventName())
-                .addValue("eventValue", e.getEventValue())
-                .addValue("previousEventValue", e.getPreviousEventValue())
-                .addValue("eventTimestamp", e.getEventTimestamp())
-                .addValue("encryptionKey", encryptionKey)
-            )
+            .map(e -> buildParams(e, encryptionKey))
             .toArray(SqlParameterSource[]::new);
 
         jdbcTemplate.batchUpdate(INSERT_SQL, batch);
     }
 
+    @Transactional
+    public void saveEncrypted(IdamUserChangeAudit entity, String encryptionKey) {
+        jdbcTemplate.update(INSERT_SQL, buildParams(entity, encryptionKey));
+    }
+
+    private SqlParameterSource buildParams(IdamUserChangeAudit entity, String encryptionKey) {
+        return new MapSqlParameterSource()
+            .addValue(USER_ID,  entity.getUserId())
+            .addValue(PRINCIPAL_ID, entity.getPrincipalUserId())
+            .addValue(EVENT_TYPE,  entity.getEventType().name())
+            .addValue(EVENT_NAME, entity.getEventName())
+            .addValue(EVENT_VALUE, entity.getEventValue())
+            .addValue(PREVIOUS_EVENT_VALUE, entity.getPreviousEventValue())
+            .addValue(EVENT_TIMESTAMP, entity.getEventTimestamp())
+            .addValue(ENCRYPTION_KEY, encryptionKey);
+    }
+
     public Page<UserUpdate> findIdamUserChangeAuditsByUserId(String userId, Pageable pageable, String encryptionKey) {
-        Long total = jdbcTemplate.queryForObject(COUNT_SQL, new MapSqlParameterSource("userId", userId), Long.class);
+        Long total = jdbcTemplate.queryForObject(COUNT_SQL, new MapSqlParameterSource(USER_ID, userId), Long.class);
         if (total == null || total == 0) {
             return Page.empty(pageable);
         }
         MapSqlParameterSource params = new MapSqlParameterSource()
-            .addValue("userId", userId)
-            .addValue("encryptionKey", encryptionKey)
+            .addValue(USER_ID, userId)
+            .addValue(ENCRYPTION_KEY, encryptionKey)
             .addValue("limit", pageable.getPageSize())
             .addValue("offset", pageable.getOffset());
         List<UserUpdate> content = jdbcTemplate.query(SELECT_SQL, params, (rs, rowNum) -> new UserUpdate(
