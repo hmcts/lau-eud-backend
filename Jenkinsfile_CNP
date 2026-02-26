@@ -62,6 +62,13 @@ withPipeline(type, product, component) {
             env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD
         }
     }
+
+    before('buildinfra:prod') {
+        withAzureKeyvault( azureKeyVaultSecrets: flywaySecrets, keyVaultURLOverride: 'https://lau-prod.vault.azure.net') {
+            env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD = env.FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD
+        }
+    }
+
     syncBranchesWithMaster(branchesToSync)
     enableDbMigration('lau')
 

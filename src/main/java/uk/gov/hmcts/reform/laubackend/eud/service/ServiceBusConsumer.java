@@ -16,8 +16,8 @@ public class ServiceBusConsumer {
     private final ServiceBusMessageHandler messageHandler;
 
     @ServiceBusListener(destination = "${lau.servicebus.topic.add}", group = "${lau.servicebus.subscription.add}")
-    public void onAddMessage(String message) {
-        log.info("Received Add message from ServiceBusListener: {}", message);
+    public void onAddMessage(IdamEvent event) {
+        messageHandler.handleAddMessage(event);
     }
 
     @ServiceBusListener(destination = "${lau.servicebus.topic.modify}", group = "${lau.servicebus.subscription.modify}")
@@ -27,6 +27,6 @@ public class ServiceBusConsumer {
 
     @ServiceBusListener(destination = "${lau.servicebus.topic.remove}", group = "${lau.servicebus.subscription.remove}")
     public void onRemoveMessage(String message) {
-        log.info("Received Remove message from ServiceBusListener: {}", message);
+        log.error("Received Remove message from ServiceBusListener: {}", message);
     }
 }

@@ -3,11 +3,13 @@ package uk.gov.hmcts.reform.laubackend.eud.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.laubackend.eud.domain.EventType;
 import uk.gov.hmcts.reform.laubackend.eud.domain.IdamUserChangeAudit;
 import uk.gov.hmcts.reform.laubackend.eud.dto.IdamEvent;
+import uk.gov.hmcts.reform.laubackend.eud.dto.User;
 import uk.gov.hmcts.reform.laubackend.eud.repository.IdamUserChangeAuditCustomRepository;
 import uk.gov.hmcts.reform.laubackend.eud.repository.IdamUserChangeAuditRepository;
 
@@ -57,6 +59,28 @@ public class ServiceBusMessageHandler {
         } else {
             repository.saveAll(entities);
         }
+    }
 
+    public void handleAddMessage(IdamEvent idamEvent) {
+        User idamUser =  idamEvent.user();
+        if (idamUser == null) {
+            log.error("Received EMPTY user for ADD event @{}", idamEvent.eventDateTimeUtc());
+            return;
+        }
+        IdamUserChangeAudit audit = IdamUserChangeAudit.builder()
+            .userId(idamUser.id())
+            .eventType(idamEvent.eventType())
+            .eventName("Create user")
+            .eventValue("User Created")
+            .eventTimestamp(idamEvent.eventDateTimeUtc())
+            .build();
+        if (StringUtils.isNotBlank(idamEvent.principalId())) {
+            audit.setPrincipalUserId(idamEvent.principalId());
+        }
+        if (BooleanUtils.isTrue(encryptionEnabled)) {
+            customRepository.saveEncrypted(audit, encryptionKey);
+        } else {
+            repository.save(audit);
+        }
     }
 }
