@@ -101,5 +101,5 @@ variable "lau_eud_db_encryption_rotation" {
 variable "lau_system_user_password_rotation" {
   description = "Change this value to force regeneration of lau_system_user password"
   type        = string
-  default     = "1"
+  default     = "2"
 }

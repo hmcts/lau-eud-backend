@@ -151,7 +151,16 @@ resource "azurerm_key_vault_secret" "LAU-SYSTEM-PASSWORD" {
 }
 
 resource "random_password" "lau_system_user_password" {
-  length           = 32
+  length  = 32
+  special = true
+  upper   = true
+  lower   = true
+  numeric = true
+
+  min_upper   = 1
+  min_numeric = 1
+  min_lower   = 1
+
   override_special = "()-_"
 
   keepers = {
