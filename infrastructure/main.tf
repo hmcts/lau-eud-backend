@@ -45,8 +45,7 @@ module "lau-eud-db-flexible" {
   pgsql_version        = "15"
 
   # Setup Access Reader db user
-  force_user_permissions_trigger = "1"
-  force_db_report_privileges_trigger = "1"
+  force_user_permissions_trigger = "2"
 
   pgsql_databases = [
     {
