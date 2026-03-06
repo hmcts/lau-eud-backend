@@ -89,14 +89,7 @@ class UserDataServiceTest {
 
     @Test
     void shouldReturnUserDataByUserId() {
-        IdamUserResponse idamUserResponse = new IdamUserResponse(
-            userId,
-            email,
-            ACTIVE,
-            RECORD_TYPE,
-            null, // accountCreationDate if not needed
-            List.of(ROLE_1, ROLE_2)
-        );
+        IdamUserResponse idamUserResponse = createIdamUserResponse(userId);
         ContactInformationResponse contactInfo = new ContactInformationResponse("Org details", "", "", "", "", "", "");
         OrganisationResponse orgResponse = new OrganisationResponse(List.of(contactInfo));
 
@@ -143,14 +136,7 @@ class UserDataServiceTest {
             ""
         );
 
-        IdamUserResponse idamUserResponse = new IdamUserResponse(
-            "14567",
-            email,
-            ACTIVE,
-            RECORD_TYPE,
-            null,
-            List.of(ROLE_1, ROLE_2)
-        );
+        IdamUserResponse idamUserResponse = createIdamUserResponse("14567");
         OrganisationResponse orgResponse = new OrganisationResponse(List.of(contactInfo));
 
         when(idamClient.getUserDataByEmail(IDAM_TOKEN, email)).thenReturn(ResponseEntity.ok(idamUserResponse));
@@ -253,14 +239,7 @@ class UserDataServiceTest {
         when(params.getUserId()).thenReturn(null);
         when(params.getEmail()).thenReturn(email);
 
-        IdamUserResponse idamUserResponse = new IdamUserResponse(
-            null,
-            email,
-            ACTIVE,
-            RECORD_TYPE,
-            null,
-            List.of(ROLE_1, ROLE_2)
-        );
+        IdamUserResponse idamUserResponse = createIdamUserResponse(null);
 
         when(idamClient.getUserDataByEmail(IDAM_TOKEN, email)).thenReturn(ResponseEntity.ok(idamUserResponse));
 
@@ -292,5 +271,24 @@ class UserDataServiceTest {
         assertEquals(expected.roles(), actual.roles());
         assertEquals(expected.accountStatus(), actual.accountStatus());
         assertEquals(expected.organisationalAddress(), actual.organisationalAddress());
+    }
+
+    private IdamUserResponse createIdamUserResponse(String userId) {
+        return new IdamUserResponse(
+            userId,
+            email,
+            ACTIVE,
+            RECORD_TYPE,
+            null,
+            List.of(ROLE_1, ROLE_2),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        );
     }
 }

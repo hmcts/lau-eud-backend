@@ -1,5 +1,8 @@
 package uk.gov.hmcts.reform.laubackend.eud.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
@@ -8,7 +11,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ServiceBusConsumerConditionalTest {
     private final ApplicationContextRunner contextRunner =
         new ApplicationContextRunner().withUserConfiguration(ServiceBusConsumer.class)
-            .withBean(ServiceBusMessageHandler.class, () -> null);
+            .withPropertyValues("lau.servicebus.max-message-size=16384")
+            .withBean(ServiceBusMessageHandler.class, () -> null)
+            .withBean(ObjectMapper.class, ObjectMapper::new)
+            .withBean(Validator.class, () -> Validation.buildDefaultValidatorFactory().getValidator());
 
     @Test
     void shouldNotCreateConsumerBeanByDefault() {

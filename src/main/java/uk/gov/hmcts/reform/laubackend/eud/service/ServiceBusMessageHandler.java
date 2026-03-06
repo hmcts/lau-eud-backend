@@ -30,7 +30,7 @@ public class ServiceBusMessageHandler {
     @Value("${lau.db.encryption-enabled}")
     private Boolean encryptionEnabled;
 
-    public void handleMessage(IdamEvent idamEvent) {
+    public void handleModifyMessage(IdamEvent idamEvent) {
         if (idamEvent.eventType() == EventType.MODIFY && idamEvent.previousUser() == null) {
             log.info(
                 "Skipping modify event as it has no previous user. Principal user id {}, user id {}",

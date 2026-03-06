@@ -1,39 +1,39 @@
 package uk.gov.hmcts.reform.laubackend.eud.functionaltests.steps;
 
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.Header;
+import io.restassured.parsing.Parser;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.annotations.Step;
 import net.serenitybdd.rest.SerenityRest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.laubackend.eud.functionaltests.config.EnvConfig;
+import uk.gov.hmcts.reform.laubackend.eud.functionaltests.helper.AuthorizationHeaderHelper;
+import uk.gov.hmcts.reform.laubackend.eud.functionaltests.helper.DatabaseHelper;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserDataResponse;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserUpdatesResponse;
-import uk.gov.hmcts.reform.laubackend.eud.functionaltests.helper.AuthorizationHeaderHelper;
-import uk.gov.hmcts.reform.laubackend.eud.functionaltests.config.EnvConfig;
-import uk.gov.hmcts.reform.laubackend.eud.functionaltests.helper.DatabaseHelper;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+@Slf4j
 public class BaseSteps {
 
     private static final RequestSpecification REQSPEC;
-    private static final Logger LOGGER =
-        LoggerFactory.getLogger(BaseSteps.class);
     protected final AuthorizationHeaderHelper authorizationHeaderHelper = new AuthorizationHeaderHelper();
     protected final DatabaseHelper databaseHelper = new DatabaseHelper();
 
     static {
         final String proxyHost = System.getProperty("http.proxyHost");
         final Integer proxyPort = proxyHost == null ? null : Integer.parseInt(System.getProperty("http.proxyPort"));
-
+        RestAssured.defaultParser = Parser.JSON;
         final RestAssuredConfig config = RestAssuredConfig.newConfig()
             .encoderConfig(EncoderConfig.encoderConfig().defaultContentCharset(StandardCharsets.UTF_8));
 
@@ -42,7 +42,7 @@ public class BaseSteps {
             .setBaseUri(EnvConfig.API_URL)
             .setRelaxedHTTPSValidation();
 
-        LOGGER.info("Using base API URL: {}", EnvConfig.API_URL);
+        log.info("Using base API URL: {}", EnvConfig.API_URL);
         if (proxyHost != null) {
             specBuilder.setProxy(proxyHost, proxyPort);
         }
@@ -54,11 +54,12 @@ public class BaseSteps {
         return SerenityRest.given(REQSPEC);
     }
 
-    public ResponseEntity<UserDataResponse> performGetUserDataOperation(String endpoint,
-                                                                Map<String, String> headers,
-                                                                Map<String, String> queryParams,
-                                                 String authServiceToken) {
-
+    public ResponseEntity<UserDataResponse> performGetUserDataOperation(
+        String endpoint,
+        Map<String, String> headers,
+        Map<String, String> queryParams,
+        String authServiceToken
+    ) {
         Response response = performGetOperation(endpoint, headers, queryParams, authServiceToken);
         UserDataResponse userDataResponse = response.as(UserDataResponse.class);
         return new ResponseEntity<>(userDataResponse, HttpStatus.valueOf(response.getStatusCode()));
@@ -132,15 +133,16 @@ public class BaseSteps {
         return res.statusCode();
     }
 
-    protected Response performGetOperation(String endpoint,
-                                                         Map<String, String> headers,
-                                                         Map<String, String> queryParams,
-                                                         String authServiceToken) {
+    protected Response performGetOperation(
+        String endpoint,
+        Map<String, String> headers,
+        Map<String, String> queryParams,
+        String authServiceToken
+    ) {
         RequestSpecification requestSpecification = rest().urlEncodingEnabled(false)
             .given()
             .header("ServiceAuthorization", authServiceToken)
             .header("Content-Type", "application/json");
-
 
         if (null != headers && !headers.isEmpty()) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {

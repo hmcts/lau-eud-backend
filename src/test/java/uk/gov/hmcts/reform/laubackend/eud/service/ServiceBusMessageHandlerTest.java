@@ -60,7 +60,7 @@ class ServiceBusMessageHandlerTest {
             LocalDateTime.now(ZoneOffset.UTC)
         );
 
-        handler.handleMessage(event);
+        handler.handleModifyMessage(event);
 
         verify(userDiffService, never()).diffUsers(any(), any());
         verify(repository, never()).saveAll(any());
@@ -87,7 +87,7 @@ class ServiceBusMessageHandlerTest {
             new UserDiffService.FieldChange("roleNames", "a-role", "a-role,b-role")
         ));
 
-        handler.handleMessage(event);
+        handler.handleModifyMessage(event);
 
         verify(repository).saveAll(auditListCaptor.capture());
         List<IdamUserChangeAudit> saved = auditListCaptor.getValue();
@@ -129,7 +129,7 @@ class ServiceBusMessageHandlerTest {
             new UserDiffService.FieldChange("accountStatus", "ACTIVE", "SUSPENDED")
         ));
 
-        handler.handleMessage(event);
+        handler.handleModifyMessage(event);
 
         verify(customRepository).saveAllEncrypted(auditListCaptor.capture(), ArgumentMatchers.eq("dummy"));
         List<IdamUserChangeAudit> saved = auditListCaptor.getValue();

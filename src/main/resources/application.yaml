@@ -60,10 +60,6 @@ spring:
     placeholders:
       LAU_EUD_DB_PASSWORD: ${LAU_EUD_DB_PASSWORD:}
 
-azure:
-  application-insights:
-    instrumentation-key: ${lau.AppInsightsInstrumentationKey:00000000-0000-0000-0000-000000000000}
-
 idam:
   s2s-auth:
     url: ${S2S_URL:http://localhost:4502}
@@ -91,6 +87,7 @@ lau:
   servicebus:
     enabled: ${LAU_EUD_SERVICEBUS_ENABLED:false}
     ignore-changes-in-fields: lastModified,createDate,lastLoginDate
+    max-message-size: 16384
     subscription:
       add: ${LAU_EUD_SERVICEBUS_ADD_SUBSCRIPTION:}
       modify: ${LAU_EUD_SERVICEBUS_MODIFY_SUBSCRIPTION:}
