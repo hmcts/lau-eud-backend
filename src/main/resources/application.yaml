@@ -73,9 +73,9 @@ idam:
     url: ${IDAM_API_URL:http://localhost:5000}
   client:
     id: ${IDAM_CLIENT_NAME:lau}
-    secret: ${IDAM_CLIENT_SECRET:}
+    secret: ${IDAM_CLIENT_SECRET}
     username: ${IDAM_CLIENT_USERNAME:username}
-    password:  ${IDAM_CLIENT_PASSWORD:}
+    password:  ${IDAM_CLIENT_PASSWORD}
     redirect_uri: ${IDAM_CLIENT_REDIRECT_URL:http://localhost:3451/oauth2redirect}
 
 rd:
@@ -86,7 +86,7 @@ authorised.services: lau_frontend
 
 lau:
   db:
-    encryption-key: ${LAU_EUD_ENCRYPTION_KEY:}
+    encryption-key: ${LAU_EUD_ENCRYPTION_KEY}
     encryption-enabled: ${LAU_EUD_ENCRYPTION_ENABLED:true}
   servicebus:
     enabled: ${LAU_EUD_SERVICEBUS_ENABLED:false}
