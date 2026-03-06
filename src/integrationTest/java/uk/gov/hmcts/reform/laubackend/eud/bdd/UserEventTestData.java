@@ -68,7 +68,7 @@ final class UserEventTestData {
 
     static void seed(ServiceBusMessageHandler handler, List<IdamEvent> events) {
         for (IdamEvent event : events) {
-            handler.handleMessage(event);
+            handler.handleModifyMessage(event);
         }
     }
 
