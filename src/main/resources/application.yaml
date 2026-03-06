@@ -67,15 +67,15 @@ azure:
 idam:
   s2s-auth:
     url: ${S2S_URL:http://localhost:4502}
-    secret: ${S2S_SECRET_EUD_BACKEND:AAAAAAAAAAAAAAAA}
+    secret: ${S2S_SECRET_EUD_BACKEND}
     microservice: ${S2S_MICROSERVICE:lau_eud_backend}
   api:
     url: ${IDAM_API_URL:http://localhost:5000}
   client:
     id: ${IDAM_CLIENT_NAME:lau}
-    secret: ${IDAM_CLIENT_SECRET:12345678}
+    secret: ${IDAM_CLIENT_SECRET}
     username: ${IDAM_CLIENT_USERNAME:username}
-    password:  ${IDAM_CLIENT_PASSWORD:password}
+    password:  ${IDAM_CLIENT_PASSWORD}
     redirect_uri: ${IDAM_CLIENT_REDIRECT_URL:http://localhost:3451/oauth2redirect}
 
 rd:
@@ -86,7 +86,7 @@ authorised.services: lau_frontend
 
 lau:
   db:
-    encryption-key: ${LAU_EUD_ENCRYPTION_KEY:ThisIsATestKeyForEncryption}
+    encryption-key: ${LAU_EUD_ENCRYPTION_KEY}
     encryption-enabled: ${LAU_EUD_ENCRYPTION_ENABLED:true}
   servicebus:
     enabled: ${LAU_EUD_SERVICEBUS_ENABLED:false}
