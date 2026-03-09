@@ -32,9 +32,13 @@ lau:
 
 idam:
   s2s-auth:
-    url: ${S2S_URL:http://localhost:4554}
+    url:  ${S2S_URL:http://localhost:4554}
+    secret: AAAAAAAAAAAAAAAA
   api:
     url: ${IDAM_API_URL:http://localhost:4554}
+  client:
+    secret: 12345678
+    password: password
 
 rd:
   professional:
