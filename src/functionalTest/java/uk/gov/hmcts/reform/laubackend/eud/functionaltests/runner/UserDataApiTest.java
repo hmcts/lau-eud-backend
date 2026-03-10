@@ -30,10 +30,7 @@ public class UserDataApiTest {
         Map<String, String> queryParamMap = userDataGetApiSteps
             .givenValidParamsAreSuppliedForGetUserData(userId,"");
         ResponseEntity<UserDataResponse> responseEntity = userDataGetApiSteps
-            .whenTheGetUserDataIsInvokedWithTheGivenParams(
-            authServiceToken,
-            queryParamMap
-        );
+            .whenTheGetUserDataIsInvokedWithTheGivenParams(authServiceToken, queryParamMap);
 
         ObjectMapper objectMapper = new ObjectMapper();
         UserDataResponse actualResponse = objectMapper.convertValue(

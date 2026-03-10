@@ -3,8 +3,6 @@ package uk.gov.hmcts.reform.laubackend.eud.response;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 
 @Schema(description = "Idam User GET Response")
@@ -28,13 +26,39 @@ public record IdamUserResponse(
 
     @Schema(description = "User's roles.")
     @JsonAlias("roleNames")
-    List<String> roles
-) implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+    List<String> roles,
 
+    @Schema(description = "Forename")
+    String forename,
+
+    @Schema(description = "Surname")
+    String surname,
+
+    @Schema(description = "Display name")
+    String displayName,
+
+    @Schema(description = "SSO id")
+    String ssoId,
+
+    @Schema(description = "SSO provider")
+    String ssoProvider,
+
+    @Schema(description = "Last account modification timestamp")
+    String lastModified,
+
+    @Schema(description = "Account access locked timestamp")
+    String accessLockedDate,
+
+    @Schema(description = "Last user login timestamp")
+    String lastLoginDate
+) {
     public static IdamUserResponse empty() {
-        return new IdamUserResponse(null, null, null,
-                null, null,null);
+        return new IdamUserResponse(
+            null, null, null,
+            null, null, null,
+            null, null, null,
+            null, null, null,
+            null, null
+        );
     }
 }
