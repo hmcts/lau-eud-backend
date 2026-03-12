@@ -6,15 +6,23 @@ server:
 management:
   endpoint:
     health:
-      show-details: "always"
-      # group:
-      #  readiness:
-      #   include: "db"
+      probes:
+        enabled: true
+      show-details: never
+      show-components: always
+
+  health:
+    ping:
+      enabled: false
+    ssl:
+      enabled: false
+    refresh:
+      enabled: false
   endpoints:
     web:
       base-path: /
       exposure:
-        include: health, info, prometheus
+        include: health
 
 springdoc:
   packagesToScan: uk.gov.hmcts.reform.laubackend.eud.controllers
@@ -22,6 +30,10 @@ springdoc:
 
 spring:
   cloud:
+    discovery:
+      client:
+        health-indicator:
+          enabled: false
     azure:
       servicebus:
         namespace: ${LAU_EUD_SERVICEBUS_IDAM_NAMESPACE:}
