@@ -5,7 +5,7 @@
 def type = "java"
 def product = "lau"
 def component = "eud-backend"
-def branchesToSync = ['demo','perftest','ithc']
+def branchesToSync = ['demo','perftest']
 
 def flywaySecrets = [
         secret('eud-backend-app-db-password', 'FLYWAY_PLACEHOLDERS_LAU_EUD_DB_PASSWORD')
