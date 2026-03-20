@@ -165,7 +165,7 @@ def versions = [
   junit             : '5.12.2',
   junitPlatform     : '1.12.2',
   serenity          : '4.3.4',
-  testcontainers    : '2.0.3',
+  testcontainers    : '2.0.4',
 ]
 
 ext {
