@@ -169,7 +169,7 @@ def versions = [
 ]
 
 ext {
-  log4JVersion = "2.25.4"
+  log4JVersion = "2.26.0"
   logbackVersion = "1.5.32"
 }
 
