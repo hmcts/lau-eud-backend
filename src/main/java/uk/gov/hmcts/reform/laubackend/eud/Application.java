@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication
+@SpringBootApplication(excludeName = "uk.gov.hmcts.reform.authorisation.ServiceAuthAutoConfiguration")
 @EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.laubackend.eud"})
 @SuppressWarnings("HideUtilityClassConstructor")
 @EnableAzureMessaging

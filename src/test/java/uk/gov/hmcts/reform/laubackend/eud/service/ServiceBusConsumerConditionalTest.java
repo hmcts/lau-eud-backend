@@ -7,12 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 class ServiceBusConsumerConditionalTest {
     private final ApplicationContextRunner contextRunner =
         new ApplicationContextRunner().withUserConfiguration(ServiceBusConsumer.class)
             .withPropertyValues("lau.servicebus.max-message-size=16384")
-            .withBean(ServiceBusMessageHandler.class, () -> null)
+            .withPropertyValues("lau.db.encryption-key=test-key", "lau.db.encryption-enabled=false")
+            .withBean(ServiceBusMessageHandler.class, () -> mock(ServiceBusMessageHandler.class))
             .withBean(ObjectMapper.class, ObjectMapper::new)
             .withBean(Validator.class, () -> Validation.buildDefaultValidatorFactory().getValidator());
 
