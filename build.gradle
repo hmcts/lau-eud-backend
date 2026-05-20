@@ -157,7 +157,7 @@ def versions = [
   // Keep these aligned (Cucumber ↔ JUnit ↔ JUnit Platform) to avoid classpath conflicts.
   cucumber          : '7.14.0',
   junit             : '6.0.3',
-  junitPlatform     : '6.0.3',
+  junitPlatform     : '6.1.0',
   serenity          : '4.3.4',
   testcontainers    : '2.0.5',
 ]
