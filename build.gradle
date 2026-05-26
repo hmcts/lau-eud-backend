@@ -158,14 +158,15 @@ def versions = [
   cucumber          : '7.14.0',
   junit             : '6.0.3',
   junitPlatform     : '6.1.0',
+  log4j             : '2.26.0',
+  logback           : '1.5.32',
   serenity          : '4.3.4',
   testcontainers    : '2.0.5',
 ]
 
-ext {
-  log4JVersion = "2.26.0"
-  logbackVersion = "1.5.32"
-}
+// review with every spring upgrade
+ext['tomcat.version'] = '11.0.22'
+ext['netty.version'] = '4.2.13.Final'
 
 dependencies {
   implementation group: "com.azure.spring", name: "spring-cloud-azure-starter-servicebus"
@@ -181,10 +182,10 @@ dependencies {
   implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '8.0.0'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4JVersion
-  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: log4JVersion
-  implementation group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
-  implementation group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: versions.log4j
+  implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
+  implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
+  implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
   implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: versions.flywaydb
   implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.11'
   implementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
