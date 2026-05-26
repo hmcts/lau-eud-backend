@@ -16,7 +16,7 @@ plugins {
   id 'org.sonarqube' version '7.3.0.8198'
   id 'org.owasp.dependencycheck' version '12.2.1'
   id 'uk.gov.hmcts.java' version '0.12.70'
-  id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
+  id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
 }
 
 application {
@@ -160,7 +160,7 @@ def versions = [
   junitPlatform     : '6.1.0',
   log4j             : '2.26.0',
   logback           : '1.5.32',
-  serenity          : '4.3.4',
+  serenity          : '5.3.10',
   testcontainers    : '2.0.5',
 ]
 
