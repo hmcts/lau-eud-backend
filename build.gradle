@@ -201,7 +201,7 @@ dependencies {
   testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all'
 
   //Integration test
-  testImplementation group: 'com.github.tomakehurst', name: 'wiremock-jre8-standalone', version: '3.0.1'
+  testImplementation group: 'org.wiremock', name: 'wiremock-standalone', version: '3.13.2'
   testImplementation group: 'com.google.code.gson', name: 'gson', version: '2.14.0'
   testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.3.0'
   testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testcontainers
