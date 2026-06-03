@@ -117,6 +117,8 @@ sonarqube {
   properties {
     property "sonar.projectName", "Reform :: lau-eud-backend"
     property "sonar.projectKey", "uk.gov.hmcts.reform:lau-eud-backend"
+    property "sonar.sources", "src/main/java"
+    property "sonar.tests", "src/test/java,src/smokeTest/java,src/functionalTest/java,src/integrationTest/java"
   }
 }
 

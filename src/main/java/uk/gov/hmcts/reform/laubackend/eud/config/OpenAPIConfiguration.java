@@ -28,10 +28,9 @@ public class OpenAPIConfiguration {
     @Bean
     public OperationCustomizer hideSortForGetUserAccountUpdates() {
         return (operation, handlerMethod) -> {
-            if (ACCOUNT_UPDATES_API_METHOD.equals(handlerMethod.getMethod().getName())) {
-                if (operation.getParameters() != null) {
-                    operation.getParameters().removeIf(p -> "sort".equals(p.getName()));
-                }
+            String handlerName = handlerMethod.getMethod().getName();
+            if (ACCOUNT_UPDATES_API_METHOD.equals(handlerName) && operation.getParameters() != null) {
+                operation.getParameters().removeIf(p -> "sort".equals(p.getName()));
             }
             return operation;
         };
