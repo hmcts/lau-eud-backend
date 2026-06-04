@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @ExtendWith(SerenityJUnit5Extension.class)
-public class UserDataApiTest {
+class UserDataApiTest {
 
     @Steps
     UserDataGetApiSteps userDataGetApiSteps;
 
     @Test
     @Title("Assert response code of 200 for GET UserData Api with valid headers and valid request params")
-    public void assertHttpSuccessResponseCodeForCaseViewApi() throws Exception {
+    void assertHttpSuccessResponseCodeForCaseViewApi() throws Exception {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         String userId = userDataGetApiSteps.createUserToPassAsParam();
         Map<String, String> queryParamMap = userDataGetApiSteps
@@ -45,7 +45,7 @@ public class UserDataApiTest {
 
     @Test
     @Title("Assert response code of 403 for GET UserData Api service with Invalid ServiceAuthorization Token")
-    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetUserDataApi() {
+    void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForGetUserDataApi() {
         String invalidServiceToken = userDataGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
         String userId = userDataGetApiSteps.createUserToPassAsParam();
         Map<String, String> queryParamMap = userDataGetApiSteps
@@ -61,7 +61,7 @@ public class UserDataApiTest {
 
     @Test
     @Title("Assert response code of 400 for GET CaseActionApi with Empty Params")
-    public void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
+    void assertResponseCodeOf400WithInvalidParamsForCaseViewApi() {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenEmptyParamsAreSuppliedForGetUserData();
         Response response = userDataGetApiSteps
@@ -74,7 +74,7 @@ public class UserDataApiTest {
 
     @Test
     @Title("Assert response code of 404 for GET UserData API with valid headers and invalid request params")
-    public void assertHttpSuccessResponse404ForInvalidUserId()  {
+    void assertHttpSuccessResponse404ForInvalidUserId()  {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
             "1122334455","");
@@ -91,7 +91,7 @@ public class UserDataApiTest {
 
     @Test
     @Title("Assert response code of 404 for GET UserData API with valid headers and invalid request params")
-    public void assertHttpSuccessResponse404ForInvalidEmail() {
+    void assertHttpSuccessResponse404ForInvalidEmail() {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
             "","randomtest@test.com");
@@ -108,7 +108,7 @@ public class UserDataApiTest {
 
     @Test
     @Title("Assert response code of 400 for GET UserData API with valid headers and userId getter than 64 characters")
-    public void assertHttpSuccessResponse400ForUserIdGreaterThan64Characters() {
+    void assertHttpSuccessResponse400ForUserIdGreaterThan64Characters() {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
                 "6f86055-e978-4758-8e65-c0373cd77fc6f6f86055-e978-4758-8e65-c0373cd77fc6","");
@@ -122,7 +122,7 @@ public class UserDataApiTest {
 
     @Test
     @Title("Assert response code of 400 for GET UserData API with valid headers and if mandatory param is missing")
-    public void assertHttpSuccessResponse400ForMandatoryParamsMissing() {
+    void assertHttpSuccessResponse400ForMandatoryParamsMissing() {
         String authServiceToken = userDataGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userDataGetApiSteps.givenValidParamsAreSuppliedForGetUserData(
                 "","");

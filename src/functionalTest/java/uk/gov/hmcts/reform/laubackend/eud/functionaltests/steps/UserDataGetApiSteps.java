@@ -3,8 +3,6 @@ package uk.gov.hmcts.reform.laubackend.eud.functionaltests.steps;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Step;
 import org.junit.jupiter.api.Assertions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserDataResponse;
 
@@ -16,8 +14,6 @@ import static uk.gov.hmcts.reform.laubackend.eud.functionaltests.utils.TestConst
 import static uk.gov.hmcts.reform.laubackend.eud.functionaltests.utils.TestConstants.USER_DATA_ENDPOINT;
 
 public class UserDataGetApiSteps extends BaseSteps {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDataGetApiSteps.class);
 
     @Step("When valid params are supplied for Get UserData API")
     public Map<String, String> givenValidParamsAreSuppliedForGetUserData(String userId, String email) {

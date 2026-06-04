@@ -9,10 +9,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @WithTags({@WithTag("testType:Functional")})
 @ActiveProfiles("functional")
-public class EndpointSecurityTest extends LauEudBaseFunctionalTest {
+class EndpointSecurityTest extends LauEudBaseFunctionalTest {
 
     @Test
-    public void shouldAllowUnauthenticatedRequestsToHealthCheck() {
+    void shouldAllowUnauthenticatedRequestsToHealthCheck() {
 
         String response = lauEudBackEndServiceClient.getHealthPage();
 

@@ -12,6 +12,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(classes = Application.class, webEnvironment = RANDOM_PORT)
 @Slf4j
 @ActiveProfiles("integration")
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
+@SuppressWarnings({"PMD.TestClassWithoutTestCases", "java:S2187"})
 public class SpringBootIntegrationTest {
 }
