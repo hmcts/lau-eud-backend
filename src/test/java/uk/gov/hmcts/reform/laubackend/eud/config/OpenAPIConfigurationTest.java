@@ -17,9 +17,11 @@ class OpenAPIConfigurationTest {
     // Dummy controller just to supply HandlerMethod instances
     static class DummyController {
         public void getUserAccountUpdates() {
+            // needed only to see that "sort" is hidden for the method with this name
         }
 
         public void someOtherEndpoint() {
+            // sort should not be affected any other named methods
         }
     }
 

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AuthorisedServicesTest {
+class AuthorisedServicesTest {
 
     private static final String AUTHORISED_SERVICES_LIST = "authorisedServicesList";
     private static final String VALID_AUTHORISED_SERVICE = "lau_eud_backend";
