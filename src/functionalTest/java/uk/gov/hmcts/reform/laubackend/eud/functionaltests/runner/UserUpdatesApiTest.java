@@ -16,14 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @ExtendWith(SerenityJUnit5Extension.class)
-public class UserUpdatesApiTest {
+class UserUpdatesApiTest {
 
     @Steps
     UserUpdatesGetApiSteps userUpdatesGetApiSteps;
 
     @Test
     @Title("Assert response code of 200 for GET UserUpdates API with valid headers and valid request params")
-    public void assertHttpSuccessResponseCodeForUserUpdatesApi() {
+    void assertHttpSuccessResponseCodeForUserUpdatesApi() {
         String authServiceToken = userUpdatesGetApiSteps.givenAValidServiceTokenIsGenerated();
         String userId = userUpdatesGetApiSteps.createUserToPassAsParam();
         Map<String, String> queryParamMap = userUpdatesGetApiSteps
@@ -42,7 +42,7 @@ public class UserUpdatesApiTest {
 
     @Test
     @Title("Assert response code of 403 for GET UserUpdates API with invalid ServiceAuthorization Token")
-    public void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForUserUpdatesApi() {
+    void assertResponseCodeOf403WithInvalidServiceAuthenticationTokenForUserUpdatesApi() {
         String invalidServiceToken = userUpdatesGetApiSteps.givenTheInvalidServiceTokenIsGenerated();
         String userId = userUpdatesGetApiSteps.createUserToPassAsParam();
         Map<String, String> queryParamMap = userUpdatesGetApiSteps
@@ -58,7 +58,7 @@ public class UserUpdatesApiTest {
 
     @Test
     @Title("Assert response code of 400 for GET UserUpdates API with empty userId")
-    public void assertResponseCodeOf400WithInvalidParamsForUserUpdatesApi() {
+    void assertResponseCodeOf400WithInvalidParamsForUserUpdatesApi() {
         String authServiceToken = userUpdatesGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userUpdatesGetApiSteps.givenEmptyParamsAreSuppliedForGetUserUpdates();
         Response response = userUpdatesGetApiSteps
@@ -71,7 +71,7 @@ public class UserUpdatesApiTest {
 
     @Test
     @Title("Assert response code of 400 for GET UserUpdates API with userId greater than 64 characters")
-    public void assertResponseCodeOf400ForUserIdGreaterThan64Characters() {
+    void assertResponseCodeOf400ForUserIdGreaterThan64Characters() {
         String authServiceToken = userUpdatesGetApiSteps.givenAValidServiceTokenIsGenerated();
         Map<String, String> queryParamMap = userUpdatesGetApiSteps.givenValidParamsAreSuppliedForGetUserUpdates(
             "6f86055-e978-4758-8e65-c0373cd77fc6f6f86055-e978-4758-8e65-c0373cd77fc6",

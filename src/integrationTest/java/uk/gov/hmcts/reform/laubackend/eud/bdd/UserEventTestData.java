@@ -9,14 +9,13 @@ import uk.gov.hmcts.reform.laubackend.eud.service.ServiceBusMessageHandler;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.List;
 
 final class UserEventTestData {
-    public static String CITIZEN_ROLE = "citizen";
-    public static String CHANGED_EMAIL = "new.email@example.org";
-    public static String CHANGED_FIRST_NAME = "Jane";
-    public static String CHANGED_LAST_NAME = "Doe";
-    public static String CHANGED_ROLE = "caseworker";
+    private static final String CITIZEN_ROLE = "citizen";
+    private static final String CHANGED_EMAIL = "new.email@example.org";
+    private static final String CHANGED_FIRST_NAME = "Jane";
+    private static final String CHANGED_LAST_NAME = "Doe";
+    private static final String CHANGED_ROLE = "caseworker";
 
 
     private UserEventTestData() {

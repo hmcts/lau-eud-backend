@@ -17,7 +17,7 @@ class SampleSmokeTest {
     private String testUrl;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         RestAssured.useRelaxedHTTPSValidation();
     }
 

@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.laubackend.eud.bdd;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.datatable.DataTable;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +54,9 @@ public class UserUpdatesGetSteps extends AbstractSteps {
         JsonPath json = new JsonPath(userUpdatesResponseBody);
         List<Map<String, Object>> content = json.getList("content");
         assertThat(content).isNotNull();
-        assertThat(content.size()).isGreaterThanOrEqualTo(1);
+        assertThat(content).hasSizeGreaterThanOrEqualTo(1);
 
-        assertThat(json.getInt("page")).isEqualTo(0);
+        assertThat(json.getInt("page")).isZero();
         assertThat(json.getInt("size")).isEqualTo(10);
         assertThat(json.getInt("totalElements")).isGreaterThanOrEqualTo(1);
         assertThat(json.getInt("totalPages")).isGreaterThanOrEqualTo(1);
@@ -86,9 +86,9 @@ public class UserUpdatesGetSteps extends AbstractSteps {
             String previousValue = row.get("previousValue");
             assertThat(content)
                 .anySatisfy(change -> {
-                    assertThat(change.get("eventName")).isEqualTo(fieldName);
-                    assertThat(change.get("value")).isEqualTo(value);
-                    assertThat(change.get("previousValue")).isEqualTo(previousValue);
+                    assertThat(change).containsEntry("eventName", fieldName);
+                    assertThat(change).containsEntry("value", value);
+                    assertThat(change).containsEntry("previousValue", previousValue);
                 });
         }
     }

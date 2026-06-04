@@ -11,7 +11,7 @@ import uk.gov.hmcts.reform.laubackend.eud.response.UserDataResponse;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserDataGetSteps extends AbstractSteps {
 
@@ -69,9 +69,7 @@ public class UserDataGetSteps extends AbstractSteps {
         assertThat(contactInformationResponses.getFirst().postCode())
             .isEqualTo("BT1 1TT");
         Map<String, Map<String, Integer>> meta = userDataResponse.meta();
-        assertThat(meta.get("idam").get("responseCode"))
-            .isEqualTo(200);
-        assertThat(meta.get("refdata").get("responseCode"))
-            .isEqualTo(200);
+        assertThat(meta.get("idam")).containsEntry("responseCode", 200);
+        assertThat(meta.get("refdata")).containsEntry("responseCode", 200);
     }
 }

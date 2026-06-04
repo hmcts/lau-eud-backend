@@ -3,8 +3,6 @@ package uk.gov.hmcts.reform.laubackend.eud.functionaltests.steps;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Step;
 import org.junit.jupiter.api.Assertions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserUpdatesResponse;
 
@@ -12,12 +10,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static uk.gov.hmcts.reform.laubackend.eud.functionaltests.utils.TestConstants.SUCCESS;
 import static uk.gov.hmcts.reform.laubackend.eud.functionaltests.utils.TestConstants.USER_UPDATES_ENDPOINT;
 
 public class UserUpdatesGetApiSteps extends BaseSteps {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserUpdatesGetApiSteps.class);
 
     @Step("When valid params are supplied for Get UserUpdates API")
     public Map<String, String> givenValidParamsAreSuppliedForGetUserUpdates(String userId, String page, String size) {
@@ -42,33 +40,27 @@ public class UserUpdatesGetApiSteps extends BaseSteps {
                                                      null, queryParamMap, serviceToken);
     }
 
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     @Step("Then the GET UserUpdates response params match the input")
-    public String thenTheGetUserUpdatesResponseParamsMatchesTheInput(Map<String, String> inputQueryParamMap,
-                                                                     UserUpdatesResponse actualResponse) {
+    public String thenTheGetUserUpdatesResponseParamsMatchesTheInput(
+        Map<String, String> inputQueryParamMap, UserUpdatesResponse actualResponse) {
 
-        if (actualResponse == null) {
-            Assertions.fail("UserUpdates response is null");
+        if (actualResponse == null || actualResponse.content() == null) {
+            fail("UserUpdates response or response.content is null");
         }
-        Assertions.assertNotNull(actualResponse.content(), "UserUpdates content is null");
 
-        for (String queryParam : inputQueryParamMap.keySet()) {
-            if ("page".equals(queryParam) && !isEmpty(inputQueryParamMap.get(queryParam))) {
-                int page = actualResponse.page();
-                Assertions.assertEquals(
-                    Integer.parseInt(inputQueryParamMap.get(queryParam)),
-                    page,
-                    "Page is not matching in the response"
-                );
-            } else if ("size".equals(queryParam) && !isEmpty(inputQueryParamMap.get(queryParam))) {
-                int size = actualResponse.size();
-                Assertions.assertEquals(
-                    Integer.parseInt(inputQueryParamMap.get(queryParam)),
-                    size,
-                    "Size is not matching in the response"
-                );
-            }
+        String queryPage = inputQueryParamMap.get("page");
+        String querySize = inputQueryParamMap.get("size");
+        if (!isEmpty(queryPage)) {
+            assertThat(Integer.parseInt(queryPage))
+                .as("Page is not matching in the response")
+                .isEqualTo(actualResponse.page());
         }
+        if (!isEmpty(querySize)) {
+            assertThat(Integer.parseInt(querySize))
+                .as("Size is not matching in the response")
+                .isEqualTo(actualResponse.size());
+        }
+
         return SUCCESS;
     }
 
