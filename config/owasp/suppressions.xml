@@ -5,6 +5,12 @@
     <cve>CVE-2025-48976</cve>
     <cve>CVE-2023-36415</cve>
     <cve>CVE-2024-35255</cve>
+    <cve>CVE-2026-41840</cve>
+    <cve>CVE-2026-41841</cve>
+    <cve>CVE-2026-41842</cve>
+    <cve>CVE-2026-41843</cve>
+    <cve>CVE-2026-41850</cve>
+    <cve>CVE-2026-41851</cve>
   </suppress>
 
   <!--Please add all the false positives under the below section-->
