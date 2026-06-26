@@ -17,6 +17,7 @@ public class ServiceTokenGenerator {
 
     private String serviceAuthToken = "dummy token";
 
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public String generateServiceToken() {
         try {
             serviceAuthToken = authTokenGenerator.generate();

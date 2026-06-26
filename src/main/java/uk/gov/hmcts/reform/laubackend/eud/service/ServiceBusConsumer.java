@@ -50,6 +50,7 @@ public class ServiceBusConsumer {
         log.error("Received Remove message from ServiceBusListener on {}", event.eventDateTimeUtc());
     }
 
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private void handleIncoming(ServiceBusReceivedMessage message, Consumer<IdamEvent> consumer) {
         long deliveryCount = message.getDeliveryCount();
         if (message.getBody() == null || message.getBody().getLength() > maxMessageSize) {

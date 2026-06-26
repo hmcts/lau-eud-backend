@@ -27,6 +27,7 @@ public class IdamTokenGenerator {
     private String idamClientToken = "idamToken";
     private String refDataToken = "refDataToken";
 
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public String generateIdamToken() {
         try {
             TokenResponse tokenResponse = idamClient.getToken(
@@ -46,6 +47,7 @@ public class IdamTokenGenerator {
         return BEARER + idamClientToken;
     }
 
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public String generateRefDataToken() {
         try {
             TokenResponse tokenResponse = idamClient.getRefDataToken(

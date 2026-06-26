@@ -35,6 +35,7 @@ import static uk.gov.hmcts.reform.laubackend.eud.constants.CommonConstants.SERVI
 @Tag(name = "User Details Operation", description = "This is the Log and audit for Enhanced User Deatils"
     + "Back-End API that will provide user data. "
     + "The API will be invoked by LAU front-end service (GET).")
+@SuppressWarnings("PMD.AvoidCatchingGenericException")
 public class UserDataController {
 
     private final UserDataService userDataService;

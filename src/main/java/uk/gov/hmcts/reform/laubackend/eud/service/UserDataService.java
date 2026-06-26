@@ -99,6 +99,7 @@ public class UserDataService {
             ref.body != null ? ref.body : new OrganisationResponse(null),meta);
     }
 
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static <T> CompletableFuture<CallResult<T>> callAsync(
         String source, Supplier<ResponseEntity<T>> call, Executor ex) {
         return CompletableFuture.supplyAsync(() -> {
@@ -112,7 +113,7 @@ public class UserDataService {
                 log.warn("[{}] FeignException status={} ", source, status);
                 return new CallResult<>(source, status, null);
             } catch (Exception e) {
-                log.warn("[{}] Exception caught: {}", source, e.getMessage(),e);
+                log.warn("[{}] Exception caught: {}", source, e.getMessage(), e);
                 return new CallResult<>(source, 500, null);
             }
         }, ex);
@@ -135,4 +136,3 @@ public class UserDataService {
         );
     }
 }
-

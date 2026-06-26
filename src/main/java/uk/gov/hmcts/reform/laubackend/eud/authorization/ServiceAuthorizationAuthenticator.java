@@ -18,6 +18,7 @@ public class ServiceAuthorizationAuthenticator {
 
     private final AuthorisedServices authorisedServices;
 
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public void authorizeServiceToken(HttpServletRequest httpServletRequest) {
         try {
             String serviceAuthHeader = httpServletRequest.getHeader(SERVICE_AUTHORISATION_HEADER);
