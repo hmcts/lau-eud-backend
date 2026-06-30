@@ -190,7 +190,7 @@ dependencies {
   implementation "ch.qos.logback:logback-classic:${versions.logback}"
   implementation "ch.qos.logback:logback-core:${versions.logback}"
   implementation "org.flywaydb:flyway-database-postgresql:${versions.flywaydb}"
-  implementation "org.postgresql:postgresql:42.7.11"
+  implementation "org.postgresql:postgresql:42.7.12"
   implementation "com.warrenstrange:googleauth:1.5.0"
   implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 
