@@ -162,7 +162,7 @@ def versions = [
   junit             : '6.0.3',
   junitPlatform     : '6.1.0',
   log4j             : '2.26.0',
-  logback           : '1.5.36',
+  logback           : '1.5.37',
   serenity          : '5.3.10',
   testcontainers    : '2.0.5',
 ]
