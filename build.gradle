@@ -163,12 +163,12 @@ def versions = [
   junitPlatform     : '6.1.2',
   log4j             : '2.26.1',
   logback           : '1.5.38',
-  serenity          : '5.3.10',
+  serenity          : '5.3.11',
   testcontainers    : '2.0.5',
 ]
 
 // review with every spring upgrade
-ext['tomcat.version'] = '11.0.23'
+ext['tomcat.version'] = '11.0.24'
 ext['netty.version'] = '4.2.15.Final'
 
 dependencies {
