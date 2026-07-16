@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@cve-dashboard")
+@Library("Infrastructure@2.4.4")
 
 def type = "java"
 def product = "lau"
@@ -35,7 +35,6 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 withPipeline(type, product, component) {
-    enableCveDashboardIngestion()
     env.TEST_URL = 'http://lau-eud-backend-aat.service.core-compute-aat.internal'
 
     loadVaultSecrets(secrets)
