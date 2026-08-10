@@ -144,8 +144,6 @@ dependencyManagement {
     mavenBom "com.azure.spring:spring-cloud-azure-dependencies:7.3.0"
     mavenBom "org.springframework.cloud:spring-cloud-dependencies:2025.1.2"
   }
-  // CVE-2026-66274, CVE-2026-66273, CVE-2026-63140, CVE-2026-66276, CVE-2026-66275, CVE-2026-66277, CVE-2026-66257
-  dependency group: 'org.apache.qpid', name: 'proton-j', version: '0.35.0'
 }
 
 repositories {
