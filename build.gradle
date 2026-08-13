@@ -172,6 +172,10 @@ ext['tomcat.version'] = '11.0.24'
 ext['netty.version'] = '4.2.16.Final'
 
 dependencies {
+  constraints {
+    implementation "com.azure:azure-security-keyvault-keys:4.10.6"
+  }
+
   implementation "com.azure.spring:spring-cloud-azure-starter-servicebus"
   implementation "com.azure.spring:spring-messaging-azure-servicebus"
   implementation "org.springframework.boot:spring-boot-starter-webmvc"
