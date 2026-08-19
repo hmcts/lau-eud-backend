@@ -4,19 +4,16 @@ import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessage;
 import com.azure.spring.messaging.converter.AzureMessageConverter;
 import com.azure.spring.messaging.servicebus.implementation.support.converter.ServiceBusMessageConverter;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.databind.json.JsonMapper;
 
 @Configuration
 public class AzureServiceBusJacksonConfig {
 
     @Bean
     AzureMessageConverter<ServiceBusReceivedMessage, ServiceBusMessage> serviceBusMessageConverter() {
-        JsonMapper jsonMapper = JsonMapper.builder()
-            .addModule(new JavaTimeModule())
-            .build();
+        JsonMapper jsonMapper = JsonMapper.builder().build();
 
         return new ServiceBusMessageConverter(jsonMapper);
     }

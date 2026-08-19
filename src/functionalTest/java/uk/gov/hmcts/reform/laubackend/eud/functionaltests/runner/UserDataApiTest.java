@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.laubackend.eud.functionaltests.runner;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.Title;
@@ -8,6 +7,7 @@ import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.ResponseEntity;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.model.UserDataResponse;
 import uk.gov.hmcts.reform.laubackend.eud.functionaltests.steps.UserDataGetApiSteps;
 

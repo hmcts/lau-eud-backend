@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.laubackend.eud.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.eud.dto.User;
 
 import java.util.ArrayList;
@@ -29,8 +29,8 @@ public class UserDiffService {
         JsonNode curr = objectMapper.valueToTree(currentUser);
 
         Set<String> keys = new TreeSet<>();
-        prev.fieldNames().forEachRemaining(keys::add);
-        curr.fieldNames().forEachRemaining(keys::add);
+        keys.addAll(prev.propertyNames());
+        keys.addAll(curr.propertyNames());
 
         List<FieldChange> changes = new ArrayList<>();
 

@@ -1,30 +1,27 @@
 package uk.gov.hmcts.reform.laubackend.eud.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.cfg.CoercionAction;
-import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.cfg.CoercionAction;
+import tools.jackson.databind.cfg.CoercionInputShape;
+import tools.jackson.databind.json.JsonMapper;
 
 @Configuration
 public class ServiceBusObjectMapperConfig {
 
     @Bean
     public ObjectMapper serviceBusObjectMapper() {
-        ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
-            .configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);
-
-        mapper.coercionConfigDefaults()
-            .setCoercion(CoercionInputShape.String, CoercionAction.Fail)
-            .setCoercion(CoercionInputShape.EmptyString, CoercionAction.Fail)
-            .setCoercion(CoercionInputShape.Integer, CoercionAction.Fail)
-            .setCoercion(CoercionInputShape.Float, CoercionAction.Fail)
-            .setCoercion(CoercionInputShape.Boolean, CoercionAction.Fail);
-
-        return mapper;
+        return JsonMapper.builder()
+            .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+            .withCoercionConfigDefaults(coercionConfig -> coercionConfig
+                .setCoercion(CoercionInputShape.String, CoercionAction.Fail)
+                .setCoercion(CoercionInputShape.EmptyString, CoercionAction.Fail)
+                .setCoercion(CoercionInputShape.Integer, CoercionAction.Fail)
+                .setCoercion(CoercionInputShape.Float, CoercionAction.Fail)
+                .setCoercion(CoercionInputShape.Boolean, CoercionAction.Fail))
+            .build();
     }
 }
