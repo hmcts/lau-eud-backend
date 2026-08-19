@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.laubackend.eud.service;
 
 import com.azure.messaging.servicebus.ServiceBusReceivedMessage;
 import com.azure.spring.messaging.servicebus.implementation.core.annotation.ServiceBusListener;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.eud.dto.IdamEvent;
 import uk.gov.hmcts.reform.laubackend.eud.exceptions.MessageProcessingException;
 

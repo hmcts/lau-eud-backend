@@ -1,9 +1,10 @@
 package uk.gov.hmcts.reform.laubackend.eud.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.laubackend.eud.domain.AccountStatus;
 import uk.gov.hmcts.reform.laubackend.eud.dto.User;
 
@@ -20,7 +21,7 @@ class UserDiffServiceTest {
 
     @BeforeEach
     void setUp() {
-        ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+        ObjectMapper mapper = JsonMapper.builder().findAndAddModules().build();
         service = new UserDiffService(mapper);
         ReflectionTestUtils.setField(service, "ignoreChangesInFields", Set.of());
     }

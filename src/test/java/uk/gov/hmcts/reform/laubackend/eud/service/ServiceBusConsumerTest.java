@@ -2,8 +2,6 @@ package uk.gov.hmcts.reform.laubackend.eud.service;
 
 import com.azure.core.util.BinaryData;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessage;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Path;
 import jakarta.validation.Validator;
@@ -18,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.laubackend.eud.domain.EventType;
 import uk.gov.hmcts.reform.laubackend.eud.dto.IdamEvent;
 import uk.gov.hmcts.reform.laubackend.eud.exceptions.MessageProcessingException;
@@ -60,7 +60,7 @@ class ServiceBusConsumerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"ADD", "MODIFY"})
-    void onMessage_whenMessageValid_shouldCallModifyHandler(String eventType) throws JsonProcessingException {
+    void onMessage_whenMessageValid_shouldCallModifyHandler(String eventType) throws JacksonException {
         ServiceBusReceivedMessage message = mock(ServiceBusReceivedMessage.class);
         BinaryData body = mock(BinaryData.class);
 
