@@ -113,6 +113,10 @@ jacocoTestReport {
 tasks.sonarqube.dependsOn(jacocoTestReport)
 tasks.check.dependsOn(integration)
 
+// Workaround for Sonar Gradle plugin 7.4 with Java 25:
+// sonarResolver consumes processResources output without declaring the task dependency.
+tasks.sonarResolver.dependsOn(processResources)
+
 sonarqube {
   properties {
     property "sonar.projectName", "Reform :: lau-eud-backend"
