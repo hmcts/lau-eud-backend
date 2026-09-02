@@ -161,7 +161,7 @@ repositories {
 
 def versions = [
   flywaydb          : '13.3.0',
-  lombok            : '1.18.46',
+  lombok            : '1.18.48',
   // Keep these aligned (Cucumber ↔ JUnit ↔ JUnit Platform) to avoid classpath conflicts.
   cucumber          : '7.34.7',
   junit             : '6.0.3',
