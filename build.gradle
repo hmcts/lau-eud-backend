@@ -215,7 +215,7 @@ dependencies {
 
   //Integration test
   testImplementation "org.wiremock:wiremock-standalone:3.13.2"
-  testImplementation "com.google.code.gson:gson:2.14.0"
+  testImplementation "com.google.code.gson:gson:2.15.0"
   testImplementation "org.awaitility:awaitility:4.3.0"
   testImplementation "org.testcontainers:testcontainers:${versions.testcontainers}"
   testImplementation "org.testcontainers:testcontainers-postgresql:${versions.testcontainers}"
