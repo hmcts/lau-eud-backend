@@ -160,7 +160,6 @@ repositories {
 }
 
 def versions = [
-  flywaydb          : '13.12.1',
   lombok            : '1.18.48',
   // Keep these aligned (Cucumber ↔ JUnit ↔ JUnit Platform) to avoid classpath conflicts.
   cucumber          : '8.0.4',
@@ -199,7 +198,7 @@ dependencies {
   implementation "org.apache.logging.log4j:log4j-to-slf4j:${versions.log4j}"
   implementation "ch.qos.logback:logback-classic:${versions.logback}"
   implementation "ch.qos.logback:logback-core:${versions.logback}"
-  implementation "org.flywaydb:flyway-database-postgresql:${versions.flywaydb}"
+  implementation "org.flywaydb:flyway-database-postgresql"
   implementation "org.postgresql:postgresql:42.7.14"
   implementation "com.warrenstrange:googleauth:1.5.0"
   implementation "tools.jackson.core:jackson-databind"
