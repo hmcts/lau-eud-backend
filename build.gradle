@@ -209,8 +209,8 @@ dependencies {
 
   testImplementation "org.springframework.boot:spring-boot-starter-test"
   testImplementation "org.springframework.boot:spring-boot-testcontainers"
-  testImplementation "io.rest-assured:rest-assured:6.1.0"
-  testImplementation "io.rest-assured:rest-assured:6.1.0"
+  testImplementation "io.rest-assured:rest-assured:6.3.0"
+  testImplementation "io.rest-assured:rest-assured:6.3.0"
   testImplementation "com.github.hmcts:fortify-client:1.4.10:all"
 
   //Integration test
